@@ -91,7 +91,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-auto text-end">
-                        <a id="Reportar" class="btn btn-sm btn-primary"> Reportar </a>
+                        <a id="Reportar" class="btn btn-sm btn-primary"> Reporte </a>
                     </div>
                 </div>
             </div>
@@ -182,9 +182,9 @@
                 //activo y gasto => debe --> pasivo e ingresos --> haber
                 tr += `<tr id="book_${book.id}">`;
                 tr += `
-                                <td class="fw-bold fs-6">${book.date }</td>
+                                <td class="fw-bolder fs-6">${book.date }</td>
                                 <td class="col-md-3">${book.description}</td>
-                                <td>${book.category.name}</td>
+                                <td class="fw-bolder text-uppercase">${book.category.name}</td>
                                 <td class="text-capitalize">${book.type}</td>
                                 <td><span class="fw-bold fs-6  badge badge-light-danger">${ book.debe.toFixed(2)} </span></td>
                                 <td><span class="fw-bold fs-6  badge badge-light-primary">${book.haber.toFixed(2)} </span></td>
@@ -198,13 +198,13 @@
                 <tr>
                     <td colspan="3"></td>
                     <td class="fw-bold">Total debe-haber: </td>
-                    <td class="fw-bold fs-6 ">Bs ${total_debe.toFixed(2)} </td>
-                    <td class="fw-bold fs-6 ">Bs ${total_haber.toFixed(2)} </td>
+                    <td ><span class="fw-bold fs-6  badge badge-danger">Bs ${total_debe.toFixed(2)} </span> </td>
+                    <td> <span  class="fw-bold fs-6  badge badge-primary " >Bs ${total_haber.toFixed(2)}</span> </td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
-                    <td class="fw-bold">Total saldo: </td>
-                    <td class="fw-bold fs-6 " colspan="2" >Bs ${(total_haber + total_debe).toFixed(2)} </td>
+                    <td class="fw-bold text-uppercase">Saldo total: </td>
+                    <td colspan="2" > <span class="fw-bold fs-6 ${total_haber + total_debe > 0?  "badge badge-primary": "badge badge-danger"}" >Bs ${(total_haber + total_debe).toFixed(2)} </span></td>
                 </tr>
             `;
             $("#cuerpo").html(tr);

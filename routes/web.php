@@ -4,6 +4,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportBookDiaryController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,7 @@ Route::post('/book', [BookController::class, 'store'])->name('book.store');
 
 Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
 Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

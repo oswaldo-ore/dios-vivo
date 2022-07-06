@@ -37,12 +37,12 @@
                             </span>
                             @endif
                             <!--begin::Currency-->
-                            <span
-                                class="fs-3 fw-bold  me-1 align-self-start {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }}">Bs.</span>
+                            {{--<span
+                                class="fs-3 fw-bold  me-1 align-self-start {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }}">Bs.</span>--}}
                             <!--end::Currency-->
                             <!--begin::Amount-->
-                            <span data-kt-countup="true" data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix=""
-                                class="fs-2hx fw-bolder {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }} me-2 lh-1 ">0</span>
+                            <span data-kt-countup="true" data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix="Bs. "
+                                class="fs-2hx fw-bolder {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }} me-2 lh-1 " data-kt-countup-decimal-places="2">0</span>
                             <!--end::Amount-->
                         </div>
                         <!--end::Info-->
@@ -60,7 +60,7 @@
     </div>
     <div class="row">
         @foreach ($year['categories'] as $categories)
-            <div class="col-md-6">
+            <div class="col-md-6 mb-6">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
@@ -69,7 +69,8 @@
                         <div class="card-toolbar">
                             <div
                                 class="fs-5 badge {{ $categories->total_ingreso > 0 ? 'badge-primary' : 'badge-danger' }} "
-                                data-kt-countup="true" data-kt-countup-value="{{$categories->total_ingreso}}" data-kt-countup-prefix="Bs."
+                                data-kt-countup="true" data-kt-countup-decimal-places="2"
+                                data-kt-countup-value="{{$categories->total_ingreso}}" data-kt-countup-prefix="Bs. "
                                 >Bs.
                                 </div>
                         </div>

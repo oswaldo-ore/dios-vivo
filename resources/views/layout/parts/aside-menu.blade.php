@@ -95,7 +95,7 @@
 </div>
 
 
-<div class="menu-item">
+{{--<div class="menu-item">
     <a class="menu-link" href="https://preview.keenthemes.com/metronic8/demo1/layout-builder.html"
         title="Build your layout and export HTML for server side integration" data-bs-toggle="tooltip"
         data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
@@ -116,7 +116,7 @@
         </span>
         <span class="menu-title">Layout Builder</span>
     </a>
-</div>
+</div>--}}
 <div class="menu-item">
     <div class="menu-content">
         <div class="separator mx-1 my-4"></div>

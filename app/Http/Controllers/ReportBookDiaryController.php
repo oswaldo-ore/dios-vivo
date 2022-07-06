@@ -23,11 +23,12 @@ class ReportBookDiaryController extends Controller
             $dateFin = $date[1];
             $category_id = $request->category_id;
             if ($request->category_id == 0) {
-                $books = Book::with('category:id,name')->where("date", ">=", $dateInicio)->where('date', '<=', $dateFin)->get();
+                $books = Book::with('category:id,name')->where("date", ">=", $dateInicio)->where('date', '<=', $dateFin)->orderBy("date","asc")->get();
             } else {
                 $books = Book::where("date", ">=", $dateInicio)
                     ->where('date', '<=', $dateFin)
                     ->with("category")
+                    ->orderBy("date","asc")
                     ->where('category_id', $category_id)
                     ->get();
             }
