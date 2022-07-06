@@ -49,7 +49,7 @@ class BookController extends Controller
             $haber = $data->type  == "ingreso" ? $data->amount : 0;
             $books[] = [
                 "date" => $data->date,
-                "debe" => $debe,
+                "debe" => $debe*(-1),
                 "haber" => $haber,
                 "description" => $data->description,
                 "type" => $data->type,

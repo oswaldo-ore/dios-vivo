@@ -27,7 +27,7 @@
                         <label class="required form-label">Fecha :</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" placeholder="Seleccione una fecha"
+                        <input class="form-control form-control-sm form-control-solid" autocomplete="off" placeholder="Seleccione una fecha"
                             id="date" name="date" required />
                         <!--end::Input-->
                     </div>
@@ -42,7 +42,7 @@
                             @forelse ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @forelse ($category->categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" category_id={{$category->category_id}} >{{ $category->name }}</option>
                                     @empty
                                         <option disabled> No tiene una categoria.</option>
                                     @endforelse
@@ -58,10 +58,10 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <select class="form-select form-select-sm form-select-solid" data-control="select2"
-                            data-placeholder="Seleccione una tipo" name="type" id="type" required>
+                            data-placeholder="Seleccione una tipo" name="type" id="type" required disabled>
                             <option></option>
-                            <option value="ingreso"> Ingreso</option>
-                            <option value="egreso">Egreso</option>
+                            <option value="ingreso" id="1"> Ingreso</option>
+                            <option value="egreso" id="2">Egreso</option>
                         </select>
                         <!--end::Input-->
                     </div>
@@ -81,7 +81,7 @@
                         <label class="required form-label">Cantidad: </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" placeholder="" required
+                        <input class="form-control form-control-sm form-control-solid" type="number" autocomplete="off" placeholder="" required
                             id="amount" name="amount" />
                         <!--end::Input-->
                     </div>
@@ -131,6 +131,15 @@
             $("#menu-registrar-book").addClass('active open');
             $("#date").flatpickr();
             $("#date").prop('readonly', false);
+
+            $("#category").on('change',function(){
+                var id = $(this).find(':selected').attr('category_id');
+                if(id == 1){
+                    $(`#type`).val('ingreso').change();
+                }else{
+                    $(`#type`).val('egreso').change();
+                }
+            });
 
             $('#form-book').on('submit', function(e) {
                 e.preventDefault();
@@ -199,7 +208,7 @@
                 tr += `<td>${book.date }</td>
                                 <td>${book.category_name}</td>
                                 <td>${book.type}</td>
-                                <td><span class="badge badge-light-danger">${debe} </span></td>
+                                <td><span class="badge badge-light-danger">- ${debe} </span></td>
                                 <td><span class="badge badge-light-primary">${haber} </span></td>
                                 <td>${book.description}</td>
                                 <td>
