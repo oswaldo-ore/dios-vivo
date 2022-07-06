@@ -22,7 +22,7 @@
                     <div class="form-group mb-4">
                         <label for="" class="form-label required"> Nombre </label>
                         <input type="text" class="form-control form-control-sm form-control-solid" name="name"
-                            required>
+                            required autocomplete="off">
                     </div>
                     <select class="form-select form-select-solid" data-control="select2"
                         data-placeholder="Select an option" name="category_id" required>

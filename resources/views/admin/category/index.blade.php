@@ -52,12 +52,12 @@
                                                 <tbody>
                                                     @forelse ($category->categories as $category)
                                                         <tr>
-                                                            <td>{{ $category->id }}</td>
-                                                            <td class="min-w-150px">{{ $category->name }}</td>
-                                                            <td><span class="badge badge-primary"> Activo</span></td>
+                                                            <td class="align-middle">{{ $category->id }}</td>
+                                                            <td class="min-w-150px align-middle">{{ $category->name }}</td>
+                                                            <td class="align-middle"><span class="badge badge-primary "> Activo</span></td>
                                                             <td>
                                                                 <a href="#"
-                                                                    class="btn btn-sm btn-primary btn-icon pe-1"
+                                                                    class="btn btn-sm btn-light-primary btn-icon pe-1"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#categoria_edit{{ $category->id }}">
                                                                     <span class="svg-icon svg-icon-primary svg-icon">
@@ -139,3 +139,10 @@
         </div>
     </div>
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function (){
+            $("#menu-categoria").addClass('active open');
+        });
+    </script>
+@endpush

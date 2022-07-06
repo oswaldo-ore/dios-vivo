@@ -17,8 +17,8 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->date('date');
             $table->longText('description');
-            $table->double('debe', 8, 4)->default(0);
-            $table->double('haber', 8, 4)->default(0);
+            $table->double('debe', 8,3)->default(0);
+            $table->double('haber', 8, 3)->default(0);
             $table->enum('type', ["ingreso", "egreso"])->default("ingreso");
             $table->softDeletes();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();

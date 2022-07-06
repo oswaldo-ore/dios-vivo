@@ -128,6 +128,7 @@
     <script>
         var libroDiario = [];
         $(document).ready(function() {
+            $("#menu-registrar-book").addClass('active open');
             $("#date").flatpickr();
             $("#date").prop('readonly', false);
 

@@ -1,5 +1,8 @@
 @extends('layout.app')
 
+@push('css')
+@endpush
+
 @section('page-menu-title')
     Dashboard
 @endsection
@@ -53,17 +56,23 @@
                         </select>
                         <!--end::Input-->
                     </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="col-auto text-end">
-                            <button class="btn btn-sm btn-primary" type="submit"> Buscar </button>
+                    <div class="col-auto mb-6">
+                        <div class="form-check form-check-custom form-check-solid form-check-sm">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked"
+                                checked="checked" />
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Solo mes
+                            </label>
                         </div>
+                    </div>
+                    <div class="col mb-3 text-end">
+                        <button class="btn btn-sm btn-primary" type="submit"> Buscar </button>
                     </div>
                 </div>
             </form>
             <div class="row">
                 <div class="table-responsive">
-                    <table class="table table-hover table-rounded table-striped border gy-7 gs-7">
+                    <table class="table table-hover table-rounded border gy-4 gs-4">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
                                 <th>Fecha</th>
@@ -74,7 +83,7 @@
                                 <th>Haber</th>
                             </tr>
                         </thead>
-                        <tbody id="cuerpo">
+                        <tbody id="cuerpo" style="vertical-align: middle;">
                         </tbody>
                     </table>
                 </div>
@@ -95,6 +104,7 @@
     <script>
         var books = [];
         $(document).ready(function() {
+            $("#menu-reportes").addClass('active open');
             $("#date").flatpickr({
                 altInput: true,
                 altFormat: "F j, Y",
@@ -119,7 +129,7 @@
                     success: function(response) {
                         console.log(response.books);
                         books = response.books;
-
+                        console.log(books);
                         updateList();
                     },
                     error: function(xhr, status, error) {
@@ -172,24 +182,29 @@
                 //activo y gasto => debe --> pasivo e ingresos --> haber
                 tr += `<tr id="book_${book.id}">`;
                 tr += `
-                                <td>${book.date }</td>
-                                <td>${book.description}</td>
+                                <td class="fw-bold fs-6">${book.date }</td>
+                                <td class="col-md-3">${book.description}</td>
                                 <td>${book.category.name}</td>
-                                <td>${book.type}</td>
-                                <td><span class="badge badge-light-danger">${book.debe >  0? book.debe: ""} </span></td>
-                                <td><span class="badge badge-light-primary">${book.haber> 0? book.haber:"" } </span></td>
+                                <td class="text-capitalize">${book.type}</td>
+                                <td><span class="fw-bold fs-6  badge badge-light-danger">${ book.debe.toFixed(2)} </span></td>
+                                <td><span class="fw-bold fs-6  badge badge-light-primary">${book.haber.toFixed(2)} </span></td>
                                 `;
                 tr += "</tr>";
-                total_debe += book.debe;
-                total_haber += book.haber;
+                total_debe += parseFloat(book.debe);
+                total_haber += parseFloat(book.haber);
             });
 
             tr += `
                 <tr>
                     <td colspan="3"></td>
-                    <td>Total: </td>
-                    <td>Bs ${total_debe} </td>
-                    <td>Bs ${total_haber} </td>
+                    <td class="fw-bold">Total debe-haber: </td>
+                    <td class="fw-bold fs-6 ">Bs ${total_debe.toFixed(2)} </td>
+                    <td class="fw-bold fs-6 ">Bs ${total_haber.toFixed(2)} </td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td class="fw-bold">Total saldo: </td>
+                    <td class="fw-bold fs-6 " colspan="2" >Bs ${(total_haber + total_debe).toFixed(2)} </td>
                 </tr>
             `;
             $("#cuerpo").html(tr);

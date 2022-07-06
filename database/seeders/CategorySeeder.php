@@ -29,5 +29,24 @@ class CategorySeeder extends Seeder
         Category::create([
             "name" => "egresos",
         ]);
+
+        Category::create([
+            "name" => "Ofrendas",
+            "category_id" => 1,
+        ]);
+
+        Category::create([
+            "name" => "Donacion",
+            "category_id" => 1,
+        ]);
+        Category::create([
+            "name" => "Energia Electrica",
+            "category_id" => 2,
+        ]);
+
+        Category::create([
+            "name" => "Agua potable",
+            "category_id" => 2,
+        ]);
     }
 }
