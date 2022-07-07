@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.template')
 
 @section('page-menu-title')
     Dashboard

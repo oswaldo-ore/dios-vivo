@@ -62,15 +62,15 @@
                     <div class="menu-content d-flex align-items-center px-3">
                         <!--begin::Avatar-->
                         <div class="symbol symbol-50px me-5">
-                            <img alt="Logo" src="assets/media/avatars/300-1.jpg" />
+                            <img alt="Logo" src="{{asset('assets/media/avatars/300-1.jpg')}}" />
                         </div>
                         <!--end::Avatar-->
                         <!--begin::Username-->
                         <div class="d-flex flex-column">
-                            <div class="fw-bolder d-flex align-items-center fs-5">Max Smith
-                                <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Pro</span>
+                            <div class="fw-bolder d-flex align-items-center fs-5 text-capitalize">{{Auth::user()->name }}
+                                <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2"></span>
                             </div>
-                            <a href="#" class="fw-bold text-muted text-hover-primary fs-7">max@kt.com</a>
+                            <a href="#" class="fw-bold text-muted text-hover-primary fs-7 text-capitalize">{{Auth::user()->last_name }}</a>
                         </div>
                         <!--end::Username-->
                     </div>
@@ -81,8 +81,8 @@
                 <!--end::Menu separator-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <a href="../../demo1/dist/account/overview.html" class="menu-link px-5">My
-                        Profile</a>
+                    <a href="../../demo1/dist/account/overview.html" class="menu-link px-5">Mi perfil
+                        </a>
                 </div>
                 <!--end::Menu item-->
 
@@ -95,8 +95,10 @@
 
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <a href="../../demo1/dist/authentication/flows/basic/sign-in.html" class="menu-link px-5">Sign
-                        Out</a>
+                    <form action="{{route('logout')}}" method="post" id="logout">
+                        @csrf
+                        <a href="javascript:$('#logout').submit();" class="menu-link px-5">Cerrar sesión</a>
+                    </form>
                 </div>
                 <!--end::Menu item-->
                 <!--begin::Menu separator-->
