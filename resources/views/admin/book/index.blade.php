@@ -27,8 +27,8 @@
                         <label class="required form-label">Fecha :</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" autocomplete="off" placeholder="Seleccione una fecha"
-                            id="date" name="date" required />
+                        <input class="form-control form-control-sm form-control-solid" autocomplete="off"
+                            placeholder="Seleccione una fecha" id="date" name="date" required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-5">
@@ -42,7 +42,8 @@
                             @forelse ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @forelse ($category->categories as $category)
-                                        <option value="{{ $category->id }}" category_id={{$category->category_id}} >{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" category_id={{ $category->category_id }}>
+                                            {{ $category->name }}</option>
                                     @empty
                                         <option disabled> No tiene una categoria.</option>
                                     @endforelse
@@ -81,8 +82,8 @@
                         <label class="required form-label">Cantidad: </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" type="number" autocomplete="off" placeholder="" required
-                            id="amount" name="amount" />
+                        <input class="form-control form-control-sm form-control-solid" type="number" autocomplete="off"
+                            placeholder="" required id="amount" name="amount" />
                         <!--end::Input-->
                     </div>
                     <div class="col-md-12">
@@ -125,18 +126,25 @@
 @endsection
 
 @push('js')
+    <script src="{{ asset('flatpickr-locale-es.js') }}"></script>
     <script>
         var libroDiario = [];
         $(document).ready(function() {
             $("#menu-registrar-book").addClass('active open');
-            $("#date").flatpickr();
+            $("#date").flatpickr({
+                altInput: true,
+                altFormat: "j F, Y",
+                dateFormat: "Y-m-d",
+                locale: "es",
+            });
+
             $("#date").prop('readonly', false);
 
-            $("#category").on('change',function(){
+            $("#category").on('change', function() {
                 var id = $(this).find(':selected').attr('category_id');
-                if(id == 1){
+                if (id == 1) {
                     $(`#type`).val('ingreso').change();
-                }else{
+                } else {
                     $(`#type`).val('egreso').change();
                 }
             });
@@ -191,7 +199,7 @@
         }
 
         function deleteItem(index) {
-            libroDiario.splice(index,1);
+            libroDiario.splice(index, 1);
             document.getElementById("book_" + index).remove();
             updateList();
         }

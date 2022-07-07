@@ -109,8 +109,8 @@
                 altInput: true,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
-                mode: "range",
                 locale: "es",
+                mode: "range",
             });
 
             $("#date").prop('readonly', false);
