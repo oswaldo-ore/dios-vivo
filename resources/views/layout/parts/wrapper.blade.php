@@ -95,15 +95,12 @@
 
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <form action="{{route('logout')}}" method="post" id="logout">
+                    <form action="{{route('logout')}}" method="POST" id="logout">
                         @csrf
                         <a href="javascript:$('#logout').submit();" class="menu-link px-5">Cerrar sesión</a>
                     </form>
                 </div>
                 <!--end::Menu item-->
-                <!--begin::Menu separator-->
-                <div class="separator my-2"></div>
-                <!--end::Menu separator-->
                 <!--begin::Menu item-->
                 {{--<div class="menu-item px-5">
                     <div class="menu-content px-5">
