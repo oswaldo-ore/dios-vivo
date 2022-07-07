@@ -52,8 +52,8 @@
                                                 <tbody>
                                                     @forelse ($category->categories as $category)
                                                         <tr>
-                                                            <td class="align-middle">{{ $category->id }}</td>
-                                                            <td class="min-w-150px align-middle">{{ $category->name }}</td>
+                                                            <td class="align-middle fs-5">{{ $category->id }}</td>
+                                                            <td class="min-w-150px align-middle fs-5">{{ $category->name }}</td>
                                                             <td class="align-middle"><span class="badge badge-primary "> Activo</span></td>
                                                             <td>
                                                                 <a href="#"
