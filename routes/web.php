@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportBookDiaryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,6 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
     Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 Auth::routes();
