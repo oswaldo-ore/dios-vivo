@@ -83,7 +83,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" type="number" autocomplete="off"
-                            placeholder="" required id="amount" name="amount" />
+                            placeholder="" required id="amount" min="0" name="amount" />
                         <!--end::Input-->
                     </div>
                     <div class="col-md-12">

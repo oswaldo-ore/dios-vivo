@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <h2 class="text-uppercase text-center fs-1 mb-5 text-gray-600"> Informe de la Iglesia del dios vivo </h2>
+    <h2 class="text-uppercase text-center fs-1 mb-5 text-gray-600"> Informe:  {{$business->name == ""? "No se encuentra nombre de la empresa": $business->name}} </h2>
     <div class="row mb-6">
         <div class="col-auto m-auto">
             <div class="card">
@@ -41,8 +41,8 @@
                                 class="fs-3 fw-bold  me-1 align-self-start {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }}">Bs.</span>--}}
                             <!--end::Currency-->
                             <!--begin::Amount-->
-                            <span data-kt-countup="true" data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix="Bs. "
-                                class="fs-2hx fw-bolder {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }} me-2 lh-1 " data-kt-countup-decimal-places="2">0</span>
+                            <span data-kt-countup="true" data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix="{{$business->currency}} "
+                                class="fs-2hx fw-bolder text-capitalize {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }} me-2 lh-1 " data-kt-countup-decimal-places="2">0</span>
                             <!--end::Amount-->
                         </div>
                         <!--end::Info-->
@@ -68,9 +68,9 @@
                         </div>
                         <div class="card-toolbar">
                             <div
-                                class="fs-5 badge {{ $categories->total_ingreso > 0 ? 'badge-primary' : 'badge-danger' }} "
+                                class="fs-5 badge text-capitalize {{ $categories->total_ingreso > 0 ? 'badge-primary' : 'badge-danger' }} "
                                 data-kt-countup="true" data-kt-countup-decimal-places="2"
-                                data-kt-countup-value="{{$categories->total_ingreso}}" data-kt-countup-prefix="Bs. "
+                                data-kt-countup-value="{{$categories->total_ingreso}}" data-kt-countup-prefix="{{$business->currency}}  "
                                 >Bs.
                                 </div>
                         </div>
@@ -82,14 +82,14 @@
                                     <thead>
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th>Categoria</th>
-                                            <th class="text-end">Saldo Total Bs:</th>
+                                            <th class="text-end text-capitalize">Saldo Total {{$business->currency}} :</th>
                                         </tr>
                                     </thead>
                                     <tbody class="fw-bolder text-gray-600">
                                         @foreach ($categories->categories as $category)
                                             <tr class="odd">
                                                 <td>{{ $category->name }}</td>
-                                                <td class="text-end"> Bs. {{ $category-> books_sum_haber + $category-> books_sum_debe}}</td>
+                                                <td class="text-end text-capitalize"> {{$business->currency}}  {{ $category-> books_sum_haber + $category-> books_sum_debe}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

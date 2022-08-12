@@ -91,7 +91,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-auto text-end">
-                        <a id="Reportar" class="btn btn-sm btn-primary"> Reporte </a>
+                        <form action="{{route('show.book.web.pdf')}}" method="get">
+                            <input hidden class="form-control form-control-sm form-control-solid" autocomplete="off"
+                        placeholder="Seleccione una fecha" id="date_reporte" name="date_reporte" required />
+                        <input type="hidden" id="category_report" name="category_report">
+                        <button  type="submit" class="btn btn-sm btn-primary" formtarget="_blank"> Reporte </button >
+                        </form>
                     </div>
                 </div>
             </div>
@@ -118,6 +123,8 @@
             $('#form-book').on('submit', function(e) {
                 e.preventDefault();
                 var date = document.getElementById("date");
+                $("#date_reporte").val(document.getElementById("date").value);
+                $('#category_report').val(document.getElementById("category").value);
                 var categoria = document.getElementById("category");
                 $.ajax({
                     url: this.action,

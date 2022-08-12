@@ -24,10 +24,10 @@ class CategorySeeder extends Seeder
             "name" => "patrimonio",
         ]);*/
         Category::create([
-            "name" => "ingresos",
+            "name" => "ingreso",
         ]);
         Category::create([
-            "name" => "egresos",
+            "name" => "egreso",
         ]);
 
         Category::create([
@@ -36,11 +36,11 @@ class CategorySeeder extends Seeder
         ]);
 
         Category::create([
-            "name" => "Donacion",
+            "name" => "Donación",
             "category_id" => 1,
         ]);
         Category::create([
-            "name" => "Energia Electrica",
+            "name" => "Energía Eléctrica",
             "category_id" => 2,
         ]);
 

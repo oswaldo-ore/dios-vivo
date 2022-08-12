@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -25,31 +26,12 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $datas = json_decode($request->books);
-        $books = [];
-        $total_debe = 0;
-        $total_haber = 0;
-        foreach ($datas as $key => $data) {
-
-            //activo y gasto => debe --> pasivo e ingresos --> haber
-            $debe = $data->type == "egreso" ? $data->amount : 0;
-            $haber = $data->type  == "ingreso" ? $data->amount : 0;
-            $books[] = [
-                "date" => $data->date,
-                "debe" => $debe*(-1),
-                "haber" => $haber,
-                "description" => $data->description,
-                "type" => $data->type,
-                "category_id" => $data->category_id,
-                "created_at" => Carbon::now(),
-                "updated_at" => Carbon::now(),
-            ];
-            $total_debe += $debe;
-            $total_haber += $haber;
+        try {
+            Book::addDebeHaberBooks($request);
+            return back()->with("success", "Libro agregado correctamente");
+        } catch (\Throwable $th) {
+            return back()->with("error","No se pudo completar la operación".$th->getMessage());
         }
-
-        Book::insert($books);
-        return back()->with("success", "Libro agregado correctamente");
     }
 
 }

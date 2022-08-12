@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Business;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,5 +28,13 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') === 'produccion') {
             URL::forceScheme('https');
         }
+
+        view()->composer('*',function($view){
+            if(auth()->check()){
+                $business = Business::getBusiness();
+
+            $view->with(compact('business'));
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -34,6 +35,13 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
     Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/libro-pdf', [ReportBookDiaryController::class, 'showPdf'])->name('show.book.web.pdf');
+    Route::get('/download-libro-pdf', [ReportBookDiaryController::class, 'downloadBooksPdf'])->name('download.book.pdf');
+
+    Route::get('business',[BusinessController::class,'index'])->name('business.index');
+    Route::put('business/{business}',[BusinessController::class,'update'])->name('business.update');
 });
 Auth::routes();
