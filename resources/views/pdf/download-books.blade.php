@@ -285,6 +285,9 @@
     .card-header {
         padding: 0.5rem 0.5rem !important;
     }
+    .float-right {
+    float: right !important;
+}
 </style>
 
 <body>
