@@ -19,9 +19,8 @@ class ReportBookDiaryController extends Controller
     public function getBookRange(Request $request)
     {
         try {
-            $date = explode(" a ", $request->date);
-            $dateInicio = $date[0];
-            $dateFin = $date[1];
+            $dateInicio = $request->date_start;
+            $dateFin = $request->date_end;
             $category_id = $request->category_id;
             $books = Book::getDetailsOfBookInRangeDate($dateInicio,$dateFin,$category_id);
             return response()->json(["books" => json_decode($books), "message" => "petición correcta"]);
@@ -31,9 +30,8 @@ class ReportBookDiaryController extends Controller
     }
 
     public function showPdf(Request $request){
-            $date = explode(" a ", $request->date_reporte);
-            $dateInicio = $date[0];
-            $dateFin = $date[1];
+            $dateInicio = $request->date_start_report;
+            $dateFin = $request->date_end_report;
             $category_id = $request->category_report;
             $books = Book::getDetailsOfBookInRangeDate($dateInicio,$dateFin,$category_id);
             $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio,$dateFin,$category_id);

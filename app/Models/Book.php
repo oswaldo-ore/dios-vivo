@@ -12,7 +12,7 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        "date", "debe", "haber", "description", "type", "category_id",'saldo',"user_id"
+        "date", "debe", "haber", "description", "type", "category_id", 'saldo', "user_id"
     ];
 
     public function category()
@@ -34,7 +34,7 @@ class Book extends Model
                 "date" => $data->date,
                 "debe" => $debe * (-1),
                 "haber" => $haber,
-                'saldo' => $debe > 0 ? (-1 * $debe): $haber,
+                'saldo' => $debe > 0 ? (-1 * $debe) : $haber,
                 "description" => $data->description,
                 "type" => $data->type,
                 "category_id" => $data->category_id,
@@ -58,11 +58,15 @@ class Book extends Model
                 ->orderBy("date", "asc")
                 ->get();
         } else {
+            $categoryIds = [$categoryId];
+            if($categoryId == 1 || $categoryId == 2){
+                $categoryIds = Category::find($categoryId)->categories->pluck('id')->toArray();
+            }
             $books = Book::where("date", ">=", $dateStar)
                 ->where('date', '<=', $dateEnd)
                 ->with("category")
                 ->orderBy("date", "asc")
-                ->where('category_id', $categoryId)
+                ->whereIn('category_id', $categoryIds)
                 ->get();
         }
         return $books;
@@ -78,12 +82,16 @@ class Book extends Model
                 ->selectRaw("sum(debe)+sum(haber) as total")
                 ->first()->toArray();
         } else {
+            $categoryIds = [$categoryId];
+            if($categoryId == 1 || $categoryId == 2){
+                $categoryIds = Category::find($categoryId)->categories->pluck('id')->toArray();
+            }
             $total = Book::where("date", ">=", $dateStart)
                 ->where('date', '<=', $dateEnd)
                 ->selectRaw("sum(CASE WHEN type = 'ingreso' THEN haber ELSE 0 END ) as total_ingreso")
                 ->selectRaw("sum(CASE WHEN type = 'egreso' THEN debe ELSE 0 END ) as total_egreso")
                 ->selectRaw("sum(debe)+sum(haber) as total")
-                ->where('category_id', $categoryId)
+                ->whereIn('category_id', $categoryIds)
                 ->first()
                 ->toArray();
         }

@@ -21,6 +21,7 @@
         margin-right: -15px;
         margin-left: -15px;
     }
+
     .table th,
     .table td {
         vertical-align: middle !important;
@@ -38,11 +39,11 @@
                 <div class="row" style="margin-bottom: 15px;">
                     <div class="col-lg-4 col-sm-4  col-md-4 col-4 ">
                         <div>
-                            <strong style="text-transform: uppercase;">{{$business->name}}</strong>
+                            <strong style="text-transform: uppercase;">{{ $business->name }}</strong>
                         </div>
-                        <div>Ubicacion: {{$business->location}}</div>
-                        <div>Correo: {{$business->email}}</div>
-                        <div>Telefono: {{$business->code_number." ".$business->phone_number}}</div>
+                        <div>Ubicacion: {{ $business->location }}</div>
+                        <div>Correo: {{ $business->email }}</div>
+                        <div>Telefono: {{ $business->code_number . ' ' . $business->phone_number }}</div>
                     </div>
                     <div class="col-lg-4 col-sm-4 col-md-4 col-4 text-center">
                         @if (isset($background))
@@ -61,16 +62,18 @@
                                     <td class="left">
                                         <strong>Total ingreso</strong>
                                     </td>
-                                    <td class="right">
-                                        <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total_ingreso'] }}</strong>
+                                    <td class="right" style="padding: 5px !important;color: green">
+                                        <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                            {{ $books->totales['total_ingreso'] }}</strong>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="left">
                                         <strong>Total egreso</strong>
                                     </td>
-                                    <td class="right">
-                                        <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total_egreso'] }}</strong>
+                                    <td class="right" style="padding: 5px !important;color: red">
+                                        <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                            {{ $books->totales['total_egreso'] }}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -78,7 +81,8 @@
                                         <strong>Total</strong>
                                     </td>
                                     <td class="right">
-                                        <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total'] }}</strong>
+                                        <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                            {{ $books->totales['total'] }}</strong>
                                     </td>
                                 </tr>
                             </tbody>
@@ -115,7 +119,8 @@
                                                 <strong>Total ingreso</strong>
                                             </td>
                                             <td class="right">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total_ingreso'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ $books->totales['total_ingreso'] }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -123,7 +128,8 @@
                                                 <strong>Total egreso</strong>
                                             </td>
                                             <td class="right">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total_egreso'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ $books->totales['total_egreso'] }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -131,7 +137,8 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="right">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}}  {{ $books->totales['total'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ $books->totales['total'] }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -143,7 +150,8 @@
                 </table>
             @endif
             <div class="card-header
-                @isset($background) p-0 @endisset" style="border-bottom: 0; margin-bottom: 15px">
+                @isset($background) p-0 @endisset"
+                style="border-bottom: 0; margin-bottom: 15px">
                 Rango de fecha del reporte:
                 <strong>{{ ucwords(\Jenssegers\Date\Date::parse($dateInicio)->format('j F Y')) }}</strong>
                 al
@@ -182,7 +190,7 @@
                                 <td class="center" style="    text-transform: capitalize;">{{ $book->type }}</td>
                                 <td class="right"
                                     style="font-weight: 600 ;text-transform: capitalize ;color:{{ $book->type == 'ingreso' ? 'green' : 'red' }}; ">
-                                    {{$business->currency}}
+                                    {{ $business->currency }}
                                     {{ $book->type == 'ingreso' ? $book->haber : $book->debe }}</td>
                             </tr>
                         @empty
@@ -192,23 +200,28 @@
             </div>
 
         </div>
+
     </div>
     <br>
     <br>
-    @if (!isset($background))
-        <div class="">
 
-            <form action="{{ route('download.book.pdf') }}" method="get">
-                <input hidden class="form-control form-control-sm form-control-solid" autocomplete="off"
-                    placeholder="Seleccione una fecha" id="date_reporte" name="date_reporte" required
-                    value="{{ $dateInicio . ' a ' . $dateFin }}" />
-                <input type="hidden" id="category_report" name="category_report" value="{{ $category_id }}">
-                <button type="submit" class="btn btn-sm btn-primary"> Reporte </button>
-            </form>
+    @if (!isset($background))
+        <div class="position-relative">
+            <div class="position-absolute top-0 start-0">
+                <form action="{{ route('download.book.pdf') }}"  method="get">
+                    <input hidden class="form-control form-control-sm form-control-solid" autocomplete="off"
+                        placeholder="Seleccione una fecha" id="date_reporte" name="date_reporte" required
+                        value="{{ $dateInicio . ' a ' . $dateFin }}" />
+                    <input type="hidden" id="category_report" name="category_report" value="{{ $category_id }}">
+                    <button type="submit" class="btn btn-sm btn-info" style="
+                        position: fixed;
+                        top: 130px;
+                        left: 10px; font-size: 18px" formtarget="_blank"> Descargar </button>
+                </form>
+            </div>
         </div>
     @else
     @endif
-
     <br>
 
 </body>

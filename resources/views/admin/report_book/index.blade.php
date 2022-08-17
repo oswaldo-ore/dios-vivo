@@ -23,16 +23,25 @@
         <div class="card-body">
             <form id="form-book" action="{{ route('report.getBookRange') }}">
                 <div class="row mb-6 align-items-end">
-                    <div class="mb-3 fv-row fv-plugins-icon-container col-md-4">
+                    <div class="mb-3 fv-row fv-plugins-icon-container col-md-3">
                         <!--begin::Label-->
-                        <label class="required form-label">Fecha :</label>
+                        <label class="required form-label">Fecha inicio :</label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Seleccione una fecha" id="date" name="date" required />
+                            placeholder="Seleccione una fecha" id="date_start" name="date_inicio" required />
                         <!--end::Input-->
                     </div>
-                    <div class="mb-3 fv-row fv-plugins-icon-container col-md-5">
+                    <div class="mb-3 fv-row fv-plugins-icon-container col-md-3">
+                        <!--begin::Label-->
+                        <label class="required form-label">Fecha fin:</label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input class="form-control form-control-sm form-control-solid" autocomplete="off"
+                            placeholder="Seleccione una fecha" id="date_end" name="date_fin" required />
+                        <!--end::Input-->
+                    </div>
+                    <div class="mb-3 fv-row fv-plugins-icon-container col-md-3">
                         <!--begin::Label-->
                         <label class="required form-label">Categoria: </label>
                         <!--end::Label-->
@@ -41,7 +50,9 @@
                             data-placeholder="Seleccione una categoria" id="category" name="category" required>
                             <option></option>
                             <optgroup label="Todos">
-                                <option value="0">Todas Categoria</option>
+                                <option value="0" selected>Todas Categoria</option>
+                                <option value="1">Todos Ingresos</option>
+                                <option value="2">Todos Egresos</option>
                             </optgroup>
                             @forelse ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
@@ -79,8 +90,7 @@
                                 <th>Descripción</th>
                                 <th>Categoria</th>
                                 <th>Tipo</th>
-                                <th>Debe</th>
-                                <th>Haber</th>
+                                <th>Monto</th>
                             </tr>
                         </thead>
                         <tbody id="cuerpo" style="vertical-align: middle;">
@@ -88,13 +98,13 @@
                     </table>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="display: none" id="button_reporte">
                 <div class="col-md-12">
                     <div class="col-auto text-end">
                         <form action="{{route('show.book.web.pdf')}}" method="get">
-                            <input hidden class="form-control form-control-sm form-control-solid" autocomplete="off"
-                        placeholder="Seleccione una fecha" id="date_reporte" name="date_reporte" required />
-                        <input type="hidden" id="category_report" name="category_report">
+                            <input hidden id="date_start_report" name="date_start_report" />
+                            <input hidden  id="date_end_report" name="date_end_report" />
+                            <input type="hidden" id="category_report" name="category_report">
                         <button  type="submit" class="btn btn-sm btn-primary" formtarget="_blank"> Reporte </button >
                         </form>
                     </div>
@@ -110,37 +120,49 @@
         var books = [];
         $(document).ready(function() {
             $("#menu-reportes").addClass('active open');
-            $("#date").flatpickr({
+            $("#date_start").flatpickr({
                 altInput: true,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
                 locale: "es",
-                mode: "range",
+            });
+            $("#date_end").flatpickr({
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                locale: "es",
             });
 
-            $("#date").prop('readonly', false);
+            $("#date_start").prop('readonly', false);
+            $("#date_end").prop('readonly', false);
 
             $('#form-book').on('submit', function(e) {
                 e.preventDefault();
-                var date = document.getElementById("date");
-                $("#date_reporte").val(document.getElementById("date").value);
-                $('#category_report').val(document.getElementById("category").value);
+                var date_start = document.getElementById("date_start");
+                var date_end = document.getElementById("date_end");
                 var categoria = document.getElementById("category");
+                $("#date_start_report").val(date_start.value);
+                $("#date_end_report").val(date_end.value);
+                $('#category_report').val(categoria.value);
+
+
                 $.ajax({
                     url: this.action,
                     type: 'GET',
                     data: {
-                        "date": document.getElementById("date").value,
-                        "category_id": document.getElementById("category").value
+                        "date_start": date_start.value,
+                        "date_end": date_end.value,
+                        "category_id": categoria.value
                     },
                     success: function(response) {
-                        console.log(response.books);
                         books = response.books;
                         console.log(books);
                         updateList();
+                        $('#button_reporte').show();
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr);
+                        $('#button_reporte').hide();
                     }
 
                 });
@@ -193,8 +215,11 @@
                                 <td class="col-md-3">${book.description}</td>
                                 <td class="fw-bolder text-uppercase">${book.category.name}</td>
                                 <td class="text-capitalize">${book.type}</td>
-                                <td><span class="fw-bold fs-6  badge badge-light-danger">${ book.debe.toFixed(2)} </span></td>
-                                <td><span class="fw-bold fs-6  badge badge-light-primary">${book.haber.toFixed(2)} </span></td>
+                                <td>
+                                    <span class="fw-bold fs-6  badge ${book.debe < 0? "badge-light-danger":"badge-light-primary" }">
+                                        ${ book.saldo.toFixed(2)}
+                                    </span>
+                                </td>
                                 `;
                 tr += "</tr>";
                 total_debe += parseFloat(book.debe);
@@ -204,14 +229,19 @@
             tr += `
                 <tr>
                     <td colspan="3"></td>
-                    <td class="fw-bold">Total debe-haber: </td>
-                    <td ><span class="fw-bold fs-6  badge badge-danger">Bs ${total_debe.toFixed(2)} </span> </td>
-                    <td> <span  class="fw-bold fs-6  badge badge-primary " >Bs ${total_haber.toFixed(2)}</span> </td>
+                    <td class="fw-bold">Total ingreso: </td>
+                    <td> <span  class="fw-bold fs-6  badge badge-primary " >Bs ${getFormatNumber(total_haber.toFixed(2))}</span> </td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
-                    <td class="fw-bold text-uppercase">Saldo total: </td>
-                    <td colspan="2" > <span class="fw-bold fs-6 ${total_haber + total_debe > 0?  "badge badge-primary": "badge badge-danger"}" >Bs ${(total_haber + total_debe).toFixed(2)} </span></td>
+                    <td class="fw-bold">Total egreso: </td>
+                    <td ><span class="fw-bold fs-6  badge badge-danger">Bs ${getFormatNumber(total_debe.toFixed(2))} </span> </td>
+
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td class="fw-bolder text-uppercase">Saldo total: </td>
+                    <td  > <span class="fw-bolder fs-6 ${total_haber + total_debe > 0?  "badge badge-primary": "badge badge-danger"}" >Bs ${getFormatNumber((total_haber + total_debe).toFixed(2))} </span></td>
                 </tr>
             `;
             $("#cuerpo").html(tr);

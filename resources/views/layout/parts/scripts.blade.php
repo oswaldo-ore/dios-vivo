@@ -37,5 +37,9 @@
         @if (session('error'))
             toastr.success("{{ session('error') }}");
         @endif
+
+        function getFormatNumber(number){
+            return new Intl.NumberFormat('de-DE').format(number);
+        }
 </script>
 <!--end::Page Custom Javascript-->
