@@ -21,11 +21,11 @@
                 @method('PUT')
                 <div class="modal-body">
 
-                    <div class="form-group mb-4">
+                    {{--<div class="form-group mb-4 d-none" >
                         <label for="" class="form-label"> Id </label>
                         <input type="text" class="form-control form-control-sm form-control-solid"
                             value="{{ $category->id }}" name="id" readonly>
-                    </div>
+                    </div>--}}
 
 
                     <div class="form-group mb-4">
@@ -33,7 +33,7 @@
                         <input type="text" class="form-control form-control-sm form-control-solid"
                             value="{{ $category->name }}" name="name">
                     </div>
-                    <div class="form-group mb-4">
+                    {{--<div class="form-group mb-4">
                         <select class="form-select form-select-solid" data-control="select2"
                             data-placeholder="Select an option" name="category_id">
                             <option></option>
@@ -44,7 +44,7 @@
                             @empty
                             @endforelse
                         </select>
-                    </div>
+                    </div>--}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light btn-sm " data-bs-dismiss="modal">Cerrar</button>

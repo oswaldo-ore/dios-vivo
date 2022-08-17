@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        "id", "name", "category_id",
+        "id", "name", "category_id",'is_enabled'
     ];
 
     public function categories()

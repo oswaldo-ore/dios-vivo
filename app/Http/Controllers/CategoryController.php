@@ -48,12 +48,25 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->name = $request->name;
-        $category->category_id = $request->category_id;
+        try {
+            $category->name = $request->name;
 
-        $category->update();
+            $category->update();
 
-        return redirect('category')->with("success", "Actualizado con éxito");
+            return redirect('category')->with("success", "Actualizado con éxito");
+        } catch (\Throwable $th) {
+            return redirect('category')->with("error", "No se pudo actualizar la categoría");
+        }
+    }
+
+    public function changeState(Category $category){
+        try {
+            $category->is_enabled = !$category->is_enabled;
+            $category->update();
+            return response()->json(['message' => 'La categoría fue '.($category->is_enabled ?'activada':'desactivada').' correctamente']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ocurrió un error '.$th->getMessage()],403);
+        }
     }
 
     /**

@@ -52,10 +52,20 @@
                                                 <tbody>
                                                     @forelse ($category->categories as $category)
                                                         <tr>
-                                                            <td class="align-middle fs-5">{{ $category->id }}</td>
-                                                            <td class="min-w-150px align-middle fs-5">{{ $category->name }}</td>
-                                                            <td class="align-middle"><span class="badge badge-primary "> Activo</span></td>
+                                                            {{-- <td class="align-middle fs-5">{{ $category->id }}</td> --}}
+                                                            <td class="min-w-150px align-middle fs-5">{{ $category->name }}
+                                                            </td>
+                                                            <td class="align-middle"><span class="badge badge-primary ">
+                                                                    Activo</span></td>
                                                             <td>
+
+                                                                <a href="#"
+                                                                    class="btn btn-sm {{ $category->is_enabled ? 'btn-danger ' : 'btn-primary ' }}  btn-icon"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#categoria_change_state{{ $category->id }}">
+                                                                    <i
+                                                                        class="fas {{ $category->is_enabled ? 'fa-thumbs-down' : 'fa-thumbs-up ' }}  "></i>
+                                                                </a>
                                                                 <a href="#"
                                                                     class="btn btn-sm btn-light-primary btn-icon pe-1"
                                                                     data-bs-toggle="modal"
@@ -81,7 +91,8 @@
                                                                             </g>
                                                                         </svg>
                                                                         <!--end::Svg Icon-->
-                                                                    </span></a>
+                                                                    </span>
+                                                                </a>
 
 
 
@@ -110,11 +121,12 @@
                                                                         </svg>
                                                                         <!--end::Svg Icon-->
                                                                     </span>
-                                                                    </span></a>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                         @include('admin.category.modal-edit')
                                                         @include('admin.category.modal-delete')
+                                                        @include('admin.category.modal-is-enable')
                                                     @empty
                                                         <tr>
                                                             <td colspan="4"> No hay resultados</td>
@@ -141,8 +153,34 @@
 @endsection
 @push('js')
     <script>
-        $(document).ready(function (){
+        $(document).ready(function() {
             $("#menu-categoria").addClass('active open');
         });
+
+        function changeStateCategory(id) {
+            url = "{{url('/')}}/category/" + id + "/changeState";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(response) {
+                    toastr.success(response.mensaje, 'Categoria actualizada');
+                    toastr.options.closeDuration = 10000;
+                    toastr.options.timeOut = 10000;
+                    toastr.options.extendedTimeOut = 10000;
+                    window.location = "{{route('category.index')}}";
+                },
+                dataType: 'json',
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr);
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        toastr.error(value[0], 'Datos invalidos!');
+                        toastr.options.closeDuration = 10000;
+                        toastr.options.timeOut = 10000;
+                        toastr.options.extendedTimeOut = 10000;
+                    });
+                }
+            });
+        }
     </script>
 @endpush

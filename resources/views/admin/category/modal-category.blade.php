@@ -24,7 +24,7 @@
                         <input type="text" class="form-control form-control-sm form-control-solid" name="name"
                             required autocomplete="off">
                     </div>
-                    <select class="form-select form-select-solid" data-control="select2"
+                    <select class="form-select form-select-solid form-select-sm" data-control="select2"
                         data-placeholder="Select an option" name="category_id" required>
                         <option></option>
                         @forelse ($categories as $category)
