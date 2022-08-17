@@ -28,7 +28,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Seleccione una fecha" id="date" name="date" required />
+                            placeholder="Seleccione una fecha" id="date" value="" name="date" required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-5">
@@ -39,6 +39,7 @@
                         <select class="form-select form-select-sm form-select-solid" data-control="select2"
                             data-placeholder="Seleccione una categoria" id="category" name="category" required>
                             <option></option>
+
                             @forelse ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @forelse ($category->categories as $category)
@@ -73,7 +74,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" placeholder="" id="description"
-                            name="description" required />
+                            name="description" value="" />
                         <!--end::Input-->
                     </div>
 
@@ -83,7 +84,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" type="number" autocomplete="off"
-                            placeholder="" required id="amount" min="0" name="amount" />
+                            placeholder="" required id="amount" min="0" value="0" step=".10"
+                            name="amount" />
                         <!--end::Input-->
                     </div>
                     <div class="col-md-12">
@@ -103,9 +105,8 @@
                                 <th>Fecha</th>
                                 <th>Categoria</th>
                                 <th>Tipo</th>
-                                <th>Debe</th>
-                                <th>Haber</th>
                                 <th>Descripción</th>
+                                <th>Saldo</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -136,6 +137,7 @@
                 altFormat: "j F, Y",
                 dateFormat: "Y-m-d",
                 locale: "es",
+                defaultDate: 'today'
             });
 
             $("#date").prop('readonly', false);
@@ -156,17 +158,22 @@
                 var tipo = document.getElementById("type");
                 var descripcion = document.getElementById("description");
                 var amount = document.getElementById("amount");
-                libroDiario.push({
-                    date: date.value,
-                    category_id: category.value,
-                    category_name: category.options[category.selectedIndex].text,
-                    type: tipo.value,
-                    description: description.value,
-                    amount: amount.value,
-                });
-                console.log(libroDiario);
-                updateList();
-                clearInput();
+                console.log(amount);
+                if (amount.value > 0) {
+                    libroDiario.push({
+                        date: date.value,
+                        category_id: category.value,
+                        category_name: category.options[category.selectedIndex].text,
+                        type: tipo.value,
+                        description: description.value,
+                        amount: amount.value,
+                    });
+                    console.log(libroDiario);
+                    updateList();
+                    clearInput();
+                } else {
+                    toastr.error("Cantidad no puede estar en 0", 'Datos invalidos!');
+                }
             });
 
 
@@ -192,10 +199,8 @@
         function clearInput() {
             var descripcion = document.getElementById("description");
             var amount = document.getElementById("amount");
-            var date = document.getElementById("date");
             descripcion.value = "";
             amount.value = "";
-            date.value = "";
         }
 
         function deleteItem(index) {
@@ -216,9 +221,13 @@
                 tr += `<td>${book.date }</td>
                                 <td>${book.category_name}</td>
                                 <td>${book.type}</td>
-                                <td><span class="badge badge-light-danger">- ${debe} </span></td>
-                                <td><span class="badge badge-light-primary">${haber} </span></td>
                                 <td>${book.description}</td>
+                                <td>
+                                    <span class="badge ${book.type == "egreso" ? 'badge-light-danger' : 'badge-light-primary'} ">
+                                        ${debe > 0 ? (-1*debe): (haber)}
+                                    </span>
+                                </td>
+
                                 <td>
                                     <a onclick="deleteItem(${index})" class="btn btn-icon btn-danger btn-sm">
                                         <span class="svg-icon svg-icon-primary svg-icon">

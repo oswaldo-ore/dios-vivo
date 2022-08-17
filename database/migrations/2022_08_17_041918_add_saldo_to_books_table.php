@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserIdToBooks extends Migration
+class AddSaldoToBooksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddUserIdToBooks extends Migration
     public function up()
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->foreignId('user_id')->default(1)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->double('saldo',8,2)->default(0.00)->comment('saldo de la categoria');
         });
     }
 
@@ -26,7 +26,7 @@ class AddUserIdToBooks extends Migration
     public function down()
     {
         Schema::table('books', function (Blueprint $table) {
-
+            //
         });
     }
 }

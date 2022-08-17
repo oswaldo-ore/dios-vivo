@@ -9,7 +9,7 @@ class Business extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'name','location','code_number','phone_number','currency',
+        'name','location','code_number','phone_number','currency','saldo_total'
     ];
 
     public static function getBusiness(){
@@ -19,5 +19,13 @@ class Business extends Model
             $business->save();
         }
         return $business;
+    }
+
+    public static function updateSaldoTotal($monto){
+        $business = Business::first();
+        if(!is_null($business)){
+            $business->saldo_total = $business->saldo_total + $monto;
+            $business->update();
+        }
     }
 }
