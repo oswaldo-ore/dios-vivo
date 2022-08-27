@@ -216,8 +216,8 @@
                                 <td class="fw-bolder text-uppercase">${book.category.name}</td>
                                 <td class="text-capitalize">${book.type}</td>
                                 <td>
-                                    <span class="fw-bold fs-6  badge ${book.debe < 0? "badge-light-danger":"badge-light-primary" }">
-                                        ${ book.saldo.toFixed(2)}
+                                    <span class="fw-bold fs-6  badge ${book.type == "egreso" ? "badge-light-danger":"badge-light-primary" }">
+                                        ${ getFormatNumber(book.saldo.toFixed(2))}
                                     </span>
                                 </td>
                                 `;
@@ -241,7 +241,7 @@
                 <tr>
                     <td colspan="3"></td>
                     <td class="fw-bolder text-uppercase">Saldo total: </td>
-                    <td  > <span class="fw-bolder fs-6 ${total_haber + total_debe > 0?  "badge badge-primary": "badge badge-danger"}" >Bs ${getFormatNumber((total_haber + total_debe).toFixed(2))} </span></td>
+                    <td  > <span class="fw-bolder fs-6 ${total_haber - total_debe > 0?  "badge badge-primary": "badge badge-danger"}" >Bs ${getFormatNumber((total_haber - total_debe).toFixed(2))< 0 ?getFormatNumber((total_haber - total_debe).toFixed(2))*-1 :getFormatNumber((total_haber - total_debe).toFixed(2)) } </span></td>
                 </tr>
             `;
             $("#cuerpo").html(tr);

@@ -16,12 +16,14 @@ class BookFactory extends Factory
     {
         $category = Category::whereNotNull("category_id")->inRandomOrder()->first();
         $haber = $category->category_id == 1 ? 1 : 0;
+        $saldo = $this->faker->randomFloat(2,0,10000);
         return [
-            'date' => $this->faker->dateTimeBetween("-2 years"),
+            'date' => $this->faker->dateTimeBetween("-4 years"),
             "description" => $this->faker->paragraph(1),
-            "debe" =>  $haber ? 0 : $this->faker->randomFloat(2,0,300)*(-1),
-            "haber" => $haber ? $this->faker->randomFloat(2,0,300):0,
+            "debe" =>  $haber ? 0 : $saldo ,
+            "haber" => $haber ? $saldo:0,
             "type" => $haber ? "ingreso " : "egreso",
+            "saldo" =>  $saldo,
             "category_id" => $category->id,
         ];
     }

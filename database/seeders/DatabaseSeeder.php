@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $user->save();
         $this->call([
             CategorySeeder::class,
-            //BookSeeder::class,
+            BookSeeder::class,
         ]);
     }
 }

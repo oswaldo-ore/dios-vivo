@@ -32,9 +32,9 @@ class Book extends Model
             $haber = $data->type  == "ingreso" ? $data->amount : 0;
             $books[] = [
                 "date" => $data->date,
-                "debe" => $debe * (-1),
+                "debe" => $debe ,
                 "haber" => $haber,
-                'saldo' => $debe > 0 ? (-1 * $debe) : $haber,
+                'saldo' => $debe > 0 ? $debe : $haber,
                 "description" => $data->description,
                 "type" => $data->type,
                 "category_id" => $data->category_id,
@@ -79,7 +79,7 @@ class Book extends Model
                 ->where('date', '<=', $dateEnd)
                 ->selectRaw("sum(CASE WHEN type = 'ingreso' THEN haber ELSE 0 END ) as total_ingreso")
                 ->selectRaw("sum(CASE WHEN type = 'egreso' THEN debe ELSE 0 END ) as total_egreso")
-                ->selectRaw("sum(debe)+sum(haber) as total")
+                ->selectRaw("cast(sum(haber)-sum(debe) as decimal(20,2)) as total ")
                 ->first()->toArray();
         } else {
             $categoryIds = [$categoryId];
@@ -90,7 +90,7 @@ class Book extends Model
                 ->where('date', '<=', $dateEnd)
                 ->selectRaw("sum(CASE WHEN type = 'ingreso' THEN haber ELSE 0 END ) as total_ingreso")
                 ->selectRaw("sum(CASE WHEN type = 'egreso' THEN debe ELSE 0 END ) as total_egreso")
-                ->selectRaw("sum(debe)+sum(haber) as total")
+                ->selectRaw("cast(sum(haber)-sum(debe) as decimal(20,2)) as total ")
                 ->whereIn('category_id', $categoryIds)
                 ->first()
                 ->toArray();

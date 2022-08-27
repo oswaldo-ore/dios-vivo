@@ -41,7 +41,7 @@
                                 class="fs-3 fw-bold  me-1 align-self-start {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }}">Bs.</span>--}}
                             <!--end::Currency-->
                             <!--begin::Amount-->
-                            <span data-kt-countup="true" data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix="{{$business->currency}} "
+                            <span data-kt-countup="true"   data-kt-countup-value="{{ $year['total_year'] }}" data-kt-countup-prefix="{{$business->currency}} "
                                 class="fs-2hx fw-bolder text-capitalize {{ $year['total_year'] < 0 ? 'text-danger' : 'text-primary' }} me-2 lh-1 " data-kt-countup-decimal-places="2">0</span>
                             <!--end::Amount-->
                         </div>
@@ -69,8 +69,8 @@
                         <div class="card-toolbar">
                             <div
                                 class="fs-5 badge text-capitalize {{ $categories->total_ingreso > 0 ? 'badge-primary' : 'badge-danger' }} "
-                                data-kt-countup="true" data-kt-countup-decimal-places="2"
-                                data-kt-countup-value="{{$categories->total_ingreso}}" data-kt-countup-prefix="{{$business->currency}}  "
+                                data-kt-countup="true"  data-kt-countup-decimal-places="2"
+                                data-kt-countup-value="{{ $categories->total_ingreso}}" data-kt-countup-prefix="{{$business->currency}}  "
                                 >Bs.
                                 </div>
                         </div>
@@ -89,7 +89,7 @@
                                         @foreach ($categories->categories as $category)
                                             <tr class="odd">
                                                 <td>{{ $category->name }}</td>
-                                                <td class="text-end text-capitalize"> {{$business->currency}}  {{ $category-> books_sum_haber + $category-> books_sum_debe}}</td>
+                                                <td class="text-end text-capitalize"> {{$business->currency}}  {{  number_format($category->books_sum_haber - $category->books_sum_debe ,2,",",".") }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

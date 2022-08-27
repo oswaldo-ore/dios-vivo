@@ -341,7 +341,7 @@
                                                 <strong>Total ingreso</strong>
                                             </td>
                                             <td class="right" style="padding: 5px !important;color: green">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ $books->totales['total_ingreso'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total_ingreso'],2,",",".")}}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -350,7 +350,7 @@
                                                 <strong>Total egreso</strong>
                                             </td>
                                             <td class="right" style="padding: 3px !important; color: red;">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ $books->totales['total_egreso'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total_egreso'],2,",",".") }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -359,7 +359,7 @@
                                                 <strong>Saldo total</strong>
                                             </td>
                                             <td class="right" style="padding: 3px !important;">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ $books->totales['total'] }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total'],2,",",".") }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -405,7 +405,7 @@
                                 <td class="right"
                                     style="font-weight: 600 ; text-transform: capitalize; color:{{ $book->type == 'ingreso' ? 'green' : 'red' }}; ">
                                     {{$business->currency}}
-                                    {{ $book->type == 'ingreso' ? $book->haber : $book->debe }}</td>
+                                    {{  number_format($book->type == 'ingreso' ? $book->saldo : $book->saldo,2,",",".") }}</td>
                             </tr>
                         @empty
                         @endforelse
