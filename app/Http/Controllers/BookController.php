@@ -34,6 +34,7 @@ class BookController extends Controller
             Business::updateSaldoTotal($saldo);
             return back()->with("success", "Registros agregados correctamente");
         } catch (\Throwable $th) {
+            dd($th->getMessage().$th->getTraceAsString());
             return back()->with("error","No se pudo completar la operación".$th->getMessage());
         }
     }

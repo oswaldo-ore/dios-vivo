@@ -5,11 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Book extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         "date", "debe", "haber", "description", "type", "category_id", 'saldo', "user_id"
@@ -18,6 +20,11 @@ class Book extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function moreDescription()
+    {
+        return $this->hasMany(MoreDescriptionBook::class);
     }
 
     public static function addDebeHaberBooks($request)
@@ -30,7 +37,31 @@ class Book extends Model
             //activo y gasto => debe --> pasivo e ingresos --> haber
             $debe = $data->type == "egreso" ? $data->amount : 0;
             $haber = $data->type  == "ingreso" ? $data->amount : 0;
-            $books[] = [
+            $book = new Book([
+                "date" => $data->date,
+                "debe" => $debe,
+                "haber" => $haber,
+                'saldo' => $debe > 0 ? $debe : $haber,
+                "description" => $data->description,
+                "type" => $data->type,
+                "category_id" => $data->category_id,
+                "user_id" => Auth::user()->id,
+            ]);
+            $book->save();
+            $moreDescription = [];
+            $dataMore = json_decode(json_encode($data->more_description),true);
+            foreach ($dataMore as $more_description) {
+                $moreDescription[] = [
+                    'nombre' => $more_description['name'],
+                    'precio' => $more_description['price'],
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now(),
+                    'book_id' => $book->id,
+                ];
+            }
+            MoreDescriptionBook::insert($moreDescription);
+
+            /*$books[] = [
                 "date" => $data->date,
                 "debe" => $debe ,
                 "haber" => $haber,
@@ -41,11 +72,11 @@ class Book extends Model
                 "user_id" => Auth::user()->id,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
-            ];
+            ];*/
             $total_debe += $debe;
             $total_haber += $haber;
         }
-        Book::insert($books);
+        //Book::insert($books);
         return $total_haber - $total_debe;
     }
 
@@ -53,18 +84,20 @@ class Book extends Model
     {
         if ($categoryId == 0) {
             $books = Book::with('category:id,name')
+                ->with('moreDescription')
                 ->where("date", ">=", $dateStar)
                 ->where('date', '<=', $dateEnd)
                 ->orderBy("date", "asc")
                 ->get();
         } else {
             $categoryIds = [$categoryId];
-            if($categoryId == 1 || $categoryId == 2){
+            if ($categoryId == 1 || $categoryId == 2) {
                 $categoryIds = Category::find($categoryId)->categories->pluck('id')->toArray();
             }
             $books = Book::where("date", ">=", $dateStar)
                 ->where('date', '<=', $dateEnd)
-                ->with("category")
+                ->with("category:id,name")
+                ->with('moreDescription')
                 ->orderBy("date", "asc")
                 ->whereIn('category_id', $categoryIds)
                 ->get();
@@ -83,7 +116,7 @@ class Book extends Model
                 ->first()->toArray();
         } else {
             $categoryIds = [$categoryId];
-            if($categoryId == 1 || $categoryId == 2){
+            if ($categoryId == 1 || $categoryId == 2) {
                 $categoryIds = Category::find($categoryId)->categories->pluck('id')->toArray();
             }
             $total = Book::where("date", ">=", $dateStart)

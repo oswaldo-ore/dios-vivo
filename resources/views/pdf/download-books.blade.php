@@ -396,8 +396,17 @@
                         @forelse ($books as $book)
                             <tr>
                                 <td class="center">{{ $loop->iteration }}</td>
+                                @php
+                                    $moreDescriptionString = '';
+                                    if (count($book->moreDescription) > 0) {
+                                        $moreDescriptionString = ': <br>Detalle:<br>';
+                                        foreach ($book->moreDescription as $key => $description) {
+                                            $moreDescriptionString = $moreDescriptionString.($key+1).": ".$description->nombre . ' ( Bs. ' . $description->precio . ' ) <br>';
+                                        }
+                                    }
+                                @endphp
                                 <td class="left strong" style="font-weight: 700;">{{ $book->date }}</td>
-                                <td class="left">{{ $book->description }}</td>
+                                <td class="left">{{ $book->description==""?"Sin descripcion" : $book->description }}{!! html_entity_decode($moreDescriptionString)!!}</td>
 
                                 <td class="right" style="font-weight: 700;text-transform: capitalize; font-size: 13px">
                                     {{ $book->category->name }}</td>

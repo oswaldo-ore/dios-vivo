@@ -68,13 +68,13 @@
                         <!--end::Input-->
                     </div>
                     <div class="col-auto mb-6">
-                        <div class="form-check form-check-custom form-check-solid form-check-sm">
+                        {{--<div class="form-check form-check-custom form-check-solid form-check-sm">
                             <input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked"
                                 checked="checked" />
                             <label class="form-check-label" for="flexCheckChecked">
                                 Solo mes
                             </label>
-                        </div>
+                        </div>--}}
                     </div>
                     <div class="col mb-3 text-end">
                         <button class="btn btn-sm btn-primary" type="submit"> Buscar </button>
@@ -207,12 +207,22 @@
             var contador = 0;
             var total_debe = 0;
             var total_haber = 0;
+            var more_description_string = "";
+
             books.forEach(function(book, index) {
+                if(book.more_description.length > 0 ){
+                    more_description_string = ":<br>";
+                    book.more_description.forEach((moreDescription, index, array) => {
+                        more_description_string +=
+                            `${moreDescription.nombre} (Bs. ${moreDescription.precio} ) ${index == array.length-1 ? ".": ", <br>"}`;
+                    });
+                }
+
                 //activo y gasto => debe --> pasivo e ingresos --> haber
                 tr += `<tr id="book_${book.id}">`;
                 tr += `
                                 <td class="fw-bolder fs-6">${book.date }</td>
-                                <td class="col-md-3">${book.description}</td>
+                                <td class="col-md-3">${book.description==""?"Sin descripcion":book.description}${more_description_string}</td>
                                 <td class="fw-bolder text-uppercase">${book.category.name}</td>
                                 <td class="text-capitalize">${book.type}</td>
                                 <td>

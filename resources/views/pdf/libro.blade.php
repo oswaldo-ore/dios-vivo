@@ -64,7 +64,7 @@
                                     </td>
                                     <td class="right" style="padding: 5px !important;color: green">
                                         <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                            {{ number_format($books->totales['total_ingreso'],2,",",".") }}</strong>
+                                            {{ number_format($books->totales['total_ingreso'], 2, ',', '.') }}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -73,7 +73,7 @@
                                     </td>
                                     <td class="right" style="padding: 5px !important;color: red">
                                         <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                            {{ number_format($books->totales['total_egreso'],2,",",".") }}</strong>
+                                            {{ number_format($books->totales['total_egreso'], 2, ',', '.') }}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,7 +82,7 @@
                                     </td>
                                     <td class="right">
                                         <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                            {{  number_format($books->totales['total'],2,",",".") }}</strong>
+                                            {{ number_format($books->totales['total'], 2, ',', '.') }}</strong>
                                     </td>
                                 </tr>
                             </tbody>
@@ -120,7 +120,7 @@
                                             </td>
                                             <td class="right">
                                                 <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                                    {{ number_format($books->totales['total_ingreso'] ,2,".",",")}}</strong>
+                                                    {{ number_format($books->totales['total_ingreso'], 2, '.', ',') }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -129,7 +129,7 @@
                                             </td>
                                             <td class="right">
                                                 <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                                    {{ number_format($books->totales['total_egreso'],2,",",".") }}</strong>
+                                                    {{ number_format($books->totales['total_egreso'], 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -138,7 +138,7 @@
                                             </td>
                                             <td class="right">
                                                 <strong style="text-transform: capitalize;"> {{ $business->currency }}
-                                                    {{ number_format($books->totales['total'],2,",",".") }}</strong>
+                                                    {{ number_format($books->totales['total'], 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -182,8 +182,17 @@
                         @forelse ($books as $book)
                             <tr>
                                 <td class="center">{{ $loop->iteration }}</td>
+                                @php
+                                    $moreDescriptionString = '';
+                                    if (count($book->moreDescription) > 0) {
+                                        $moreDescriptionString = ': <br>Detalle:<br>';
+                                        foreach ($book->moreDescription as $key => $description) {
+                                            $moreDescriptionString = $moreDescriptionString.($key+1).": ".$description->nombre . ' ( Bs. ' . $description->precio . ' ) <br>';
+                                        }
+                                    }
+                                @endphp
                                 <td class="left strong" style="font-weight: 700;">{{ $book->date }}</td>
-                                <td class="left">{{ $book->description }}</td>
+                                <td class="left">{{ $book->description==""?"Sin descripcion" : $book->description }}{!! html_entity_decode($moreDescriptionString)!!}</td>
 
                                 <td class="right" style="font-weight: 700;text-transform: uppercase;">
                                     {{ $book->category->name }}</td>
@@ -208,15 +217,17 @@
     @if (!isset($background))
         <div class="position-relative">
             <div class="position-absolute top-0 start-0">
-                <form action="{{ route('download.book.pdf') }}"  method="get">
+                <form action="{{ route('download.book.pdf') }}" method="get">
                     <input hidden class="form-control form-control-sm form-control-solid" autocomplete="off"
                         placeholder="Seleccione una fecha" id="date_reporte" name="date_reporte" required
                         value="{{ $dateInicio . ' a ' . $dateFin }}" />
                     <input type="hidden" id="category_report" name="category_report" value="{{ $category_id }}">
-                    <button type="submit" class="btn btn-sm btn-info" style="
+                    <button type="submit" class="btn btn-sm btn-info"
+                        style="
                         position: fixed;
                         top: 130px;
-                        left: 10px; font-size: 18px" formtarget="_blank"> Descargar </button>
+                        left: 10px; font-size: 18px"
+                        formtarget="_blank"> Descargar </button>
                 </form>
             </div>
         </div>

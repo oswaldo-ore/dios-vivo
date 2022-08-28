@@ -20,8 +20,6 @@
         <div class="card-body">
             <form id="form-book">
                 <div class="row mb-6">
-
-
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-4">
                         <!--begin::Label-->
                         <label class="required form-label">Fecha :</label>
@@ -39,7 +37,6 @@
                         <select class="form-select form-select-sm form-select-solid" data-control="select2"
                             data-placeholder="Seleccione una categoria" id="category" name="category" required>
                             <option></option>
-
                             @forelse ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @forelse ($category->categories as $category)
@@ -73,11 +70,11 @@
                         <label class="required form-label">Descripción</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" placeholder="" id="description"
-                            name="description" value="" />
+                        <input class="form-control form-control-sm form-control-solid" autocomplete="off"
+                            placeholder="Ingrese una descripcion Ej. Pago mes abril" id="description" name="description"
+                            value="" />
                         <!--end::Input-->
                     </div>
-
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-4">
                         <!--begin::Label-->
                         <label class="required form-label">Cantidad: </label>
@@ -87,6 +84,25 @@
                             placeholder="" required id="amount" min="0" value="0" step=".10"
                             name="amount" />
                         <!--end::Input-->
+                    </div>
+                    <div class="col-md-8 ">
+                        <div class="col-md-12 mb-4" id="more_description_text_area" style="display: none;">
+                            <textarea name="more_description" class="form-control form-control-sm form-control-solid" id="more_description"
+                                placeholder="Aqui se mostrara las demas descripciones" cols="30" readonly rows="3"></textarea>
+                        </div>
+                        <div class="col-md-12 d-flex">
+                            <div class="form-check form-check-custom form-check-solid form-check-sm col-auto me-3">
+                                <input class="form-check-input" type="checkbox" value=""
+                                    id="active_more_description" />
+                                <label class="form-check-label" for="active_more_description">
+                                    Desea agregar mas descripcion
+                                </label>
+                            </div>
+                            <div class="col-auto text-start" id="button_more_description" style="display: none;">
+                                <a class="btn btn-sm p-2 btn-light-info" data-bs-toggle="modal"
+                                    data-bs-target="#modal_more_description"> Mas descripcion </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <div class="col-auto text-end">
@@ -124,12 +140,24 @@
             </div>
         </div>
     </div>
+    @include('admin.book.modal-more-description')
 @endsection
 
 @push('js')
     <script src="{{ asset('flatpickr-locale-es.js') }}"></script>
     <script>
         var libroDiario = [];
+        $('#active_more_description').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#button_more_description').show();
+                $('#amount').prop('readonly', true);
+                $('#more_description_text_area').show();
+            } else {
+                $('#button_more_description').hide();
+                $('#amount').prop('readonly', false);
+                $('#more_description_text_area').hide();
+            }
+        })
         $(document).ready(function() {
             $("#menu-registrar-book").addClass('active open');
             $("#date").flatpickr({
@@ -158,7 +186,12 @@
                 var tipo = document.getElementById("type");
                 var descripcion = document.getElementById("description");
                 var amount = document.getElementById("amount");
-                console.log(amount);
+                var more_description = [];
+                var have_more_description = false;
+                if ($('#active_more_description').is(':checked')) {
+                    more_description = more_description_list;
+                    have_more_description = true;
+                }
                 if (amount.value > 0) {
                     libroDiario.push({
                         date: date.value,
@@ -167,6 +200,8 @@
                         type: tipo.value,
                         description: description.value,
                         amount: amount.value,
+                        have_more_description: have_more_description,
+                        more_description: more_description,
                     });
                     console.log(libroDiario);
                     updateList();
@@ -201,6 +236,12 @@
             var amount = document.getElementById("amount");
             descripcion.value = "";
             amount.value = "";
+            $('#more_description').text("");
+            $('#body_more_description').html("");
+            $('#button_more_description').hide();
+            $('#amount').prop('readonly', false);
+            $('#more_description_text_area').hide();
+            $('#active_more_description').prop('checked', false);
         }
 
         function deleteItem(index) {
@@ -216,12 +257,20 @@
                 //activo y gasto => debe --> pasivo e ingresos --> haber
                 var debe = book.type == "egreso" ? book.amount : 0;
                 var haber = book.type == "ingreso" ? book.amount : 0;
+                var more_description_string = "";
+                if (book.have_more_description) {
+                    more_description_string = ": ";
+                    book.more_description.forEach((moreDescription, index, array) => {
+                        more_description_string +=
+                            `${moreDescription.name} ( ${moreDescription.price} ) ${index == array.length-1 ? ".": ", "}`;
+                    });
+                }
 
                 tr += `<tr id="book_${index}">`;
                 tr += `<td>${book.date }</td>
                                 <td>${book.category_name}</td>
                                 <td>${book.type}</td>
-                                <td>${book.description}</td>
+                                <td>${book.description}${more_description_string}</td>
                                 <td>
                                     <span class="badge ${book.type == "egreso" ? 'badge-light-danger' : 'badge-light-primary'} ">
                                         ${debe > 0 ? (-1*debe): (haber)}
