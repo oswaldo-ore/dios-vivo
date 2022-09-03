@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Business;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class ReportBookDiaryController extends Controller
 {
@@ -22,35 +23,41 @@ class ReportBookDiaryController extends Controller
             $dateInicio = $request->date_start;
             $dateFin = $request->date_end;
             $category_id = $request->category_id;
-            $books = Book::getDetailsOfBookInRangeDate($dateInicio,$dateFin,$category_id);
+            $books = Book::getDetailsOfBookInRangeDate($dateInicio, $dateFin, $category_id);
             return response()->json(["books" => json_decode($books), "message" => "petición correcta"]);
         } catch (\Throwable $th) {
             return response()->json(["message" => $th->getMessage()], Response::HTTP_BAD_GATEWAY);
         }
     }
 
-    public function showPdf(Request $request){
-            $dateInicio = $request->date_start_report;
-            $dateFin = $request->date_end_report;
-            $category_id = $request->category_report;
-            $books = Book::getDetailsOfBookInRangeDate($dateInicio,$dateFin,$category_id);
-            $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio,$dateFin,$category_id);
-            $category = Category::find($category_id,['name']);
-            return view('pdf.libro',compact('books','dateInicio','dateFin','category_id','category'));
-
+    public function showPdf(Request $request)
+    {
+        $dateInicio = $request->date_start_report;
+        $dateFin = $request->date_end_report;
+        $category_id = $request->category_report;
+        $books = Book::getDetailsOfBookInRangeDate($dateInicio, $dateFin, $category_id);
+        $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio, $dateFin, $category_id);
+        $category = Category::find($category_id, ['name']);
+        return view('pdf.libro', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category'));
     }
 
-    public function downloadBooksPdf(Request $request){
+    public function downloadBooksPdf(Request $request)
+    {
         $date = explode(" a ", $request->date_reporte);
         $dateInicio = $date[0];
         $dateFin = $date[1];
         $category_id = $request->category_report;
-        $books = Book::getDetailsOfBookInRangeDate($dateInicio,$dateFin,$category_id);
-        $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio,$dateFin,$category_id);
-        $category = Category::find($category_id,['name']);
+        $books = Book::getDetailsOfBookInRangeDate($dateInicio, $dateFin, $category_id);
+        $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio, $dateFin, $category_id);
+        $category = Category::find($category_id, ['name']);
         $background = "si";
-        $pdf = Pdf::loadView('pdf.download-books',compact('books','dateInicio','dateFin','category_id','category','background'));
-        return $pdf->stream();
+        $business = Business::getBusiness();
 
-}
+        $pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
+        $pdf->setOptions([
+            'page-size'=>'letter',
+        ]);
+        //$pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
+        return $pdf->stream("Reporte-".$dateInicio."_".$dateFin."_".$business->name.".pdf");
+    }
 }
