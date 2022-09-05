@@ -28,7 +28,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Seleccione una fecha" id="name" name="name" maxlength="70" value="{{$business->name}}" required />
+                            placeholder="Ingrese nombre de la institucion" id="name" name="name" maxlength="70" value="{{$business->name}}" required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-6 fv-row fv-plugins-icon-container col-md-6">

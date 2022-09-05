@@ -35,7 +35,7 @@
             toastr.success("{{ session('success') }}");
         @endif
         @if (session('error'))
-            toastr.success("{{ session('error') }}");
+            toastr.error("{{ session('error') }}");
         @endif
 
         function getFormatNumber(number){

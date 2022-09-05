@@ -18,4 +18,13 @@ class DashboardController extends Controller
 
         return view('admin.dashboard.index',compact('year'));
     }
+
+    public function indexByGestion()
+    {
+        $year = Carbon::now()->year;
+        //suma total de las categorias con sus respectivas clases
+        $year= Category::totalByCategoryByYear($year);
+
+        return view('admin.dashboard.index',compact('year'));
+    }
 }

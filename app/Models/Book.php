@@ -130,4 +130,46 @@ class Book extends Model
         }
         return $total;
     }
+    // get first year
+    public static function getYearOfFirstRecord(){
+        return Book::selectRaw('MIN(date) as min_year')->first()->min_year;
+    }
+
+    public static function getYearOfLastRecord(){
+        return Book::selectRaw('MAX(date) as max_year')->first()->max_year;
+    }
+
+    //get details of books by year
+    public static function getDetailsOfBooksByYear($request){
+        $year = $request->year;
+        $category_id = $request->category_id;
+        $show_category = $request->show_category;
+
+        //todas las categorias
+        $books = Book::whereYear('date','=',$year);
+        if($category_id > 0){
+            $categories_id =[$category_id];
+            if($category_id == 1 || $category_id == 2){
+                $categories_id = Category::withTrashed()->find($category_id)->categories->pluck('id')->toArray();
+            }
+            $books->whereIn('category_id',$categories_id)->selectRaw('category_id')->groupBy('category_id')->orderBy('new_date')->with('category:id,name');
+        }
+        if($show_category == 1 && $category_id == 0 ){
+            $books->selectRaw('category_id')->groupBy('category_id')->orderBy('new_date')->with('category:id,name');
+        }
+
+        $books->selectRaw("
+            count('id') as amount,
+            DATE_FORMAT(date,'%Y-%m') as new_date,
+            cast( sum(haber) as decimal(20,2)) as haber,
+            cast( sum(debe) as decimal(20,2)) as debe,
+            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
+            cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
+            cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
+        ")->groupBy('new_date');
+        //todas las categorias
+
+        return $books->get();
+    }
 }

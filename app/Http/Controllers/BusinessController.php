@@ -75,7 +75,6 @@ class BusinessController extends Controller
     public function update(Request $request, Business $business)
     {
         try {
-
             $business->name = strtolower($request->name);
             $business->location = strtolower($request->location);
             $business->email = strtolower($request->email);
@@ -83,7 +82,7 @@ class BusinessController extends Controller
             $business->phone_number = $request->phone_number;
             $business->currency = strtolower($request->currency);
             $business->update();
-            return redirect('/');
+            return back()->with('success',"Datos actualizados");
         } catch (\Throwable $th) {
             return back()->with('error','No se pudo completar la acción '. $th->getMessage() );
         }

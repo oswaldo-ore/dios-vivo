@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportBookDiaryController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +23,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(["auth"])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/management', [DashboardController::class, 'indexByGestion'])->name('management.index');
+
 
 
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
@@ -37,6 +41,9 @@ Route::middleware(["auth"])->group(function () {
     Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
     Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
 
+    Route::get('report/yearly', [ReportBookDiaryController::class, 'indexReportYearly'])->name('report.yearly.index');
+    Route::get('report/yearly/year', [ReportBookDiaryController::class, 'getReportByYear'])->name('report.getBookRangeYear');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/libro-pdf', [ReportBookDiaryController::class, 'showPdf'])->name('show.book.web.pdf');
@@ -44,5 +51,19 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get('business',[BusinessController::class,'index'])->name('business.index');
     Route::put('business/{business}',[BusinessController::class,'update'])->name('business.update');
+
+    Route::get('users/',[UserController::class,'index'])->name('users.index');
+    Route::post('users/',[UserController::class,'store'])->name('users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('users/{user}/changeState', [UserController::class, 'changeState'])->name('user.change');
+
+
+    Route::get('rols/',[RolController::class,'index'])->name('rols.index');
+    Route::post('rols/',[RolController::class,'store'])->name('rols.store');
+    Route::put('rols/{user}', [RolController::class, 'update'])->name('rols.update');
+    Route::delete('rols/{user}', [RolController::class, 'destroy'])->name('user.destroy');
+    Route::get('rols/{user}/changeState', [RolController::class, 'changeState'])->name('user.change');
+
 });
 Auth::routes();
