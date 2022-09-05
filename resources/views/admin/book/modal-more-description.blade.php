@@ -83,7 +83,7 @@
                 description_list.forEach((description, index, array) => {
                     description_cad +=
                         `${description.name} ( ${description.price} ) ${index == array.length-1 ? ".": ", "}`;
-                    precio_total += parseInt(description.price);
+                    precio_total += parseFloat(description.price);
                 });
                 $('#more_description').text(description_cad);
                 $('#amount').val(precio_total);
