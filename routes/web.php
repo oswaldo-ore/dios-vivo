@@ -3,6 +3,8 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CloseBoxController;
+use App\Http\Controllers\CloseTheBoxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportBookDiaryController;
@@ -43,6 +45,12 @@ Route::middleware(["auth"])->group(function () {
 
     Route::get('report/yearly', [ReportBookDiaryController::class, 'indexReportYearly'])->name('report.yearly.index');
     Route::get('report/yearly/year', [ReportBookDiaryController::class, 'getReportByYear'])->name('report.getBookRangeYear');
+
+    Route::get('close-box/', [CloseBoxController::class, 'index'])->name('close.box.index');
+    Route::get('close-box/close/{year}', [CloseBoxController::class, 'closeManagement'])->name('close.box.year.index');
+    Route::post('close-box/close/', [CloseBoxController::class, 'closeManagementConfirm'])->name('close.box.year.confirm.index');
+
+
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 

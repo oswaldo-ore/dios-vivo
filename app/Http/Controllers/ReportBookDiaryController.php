@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Business;
 use App\Models\Category;
+use App\Models\CloseBox;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Barryvdh\Snappy\Facades\SnappyPdf;
@@ -56,30 +57,38 @@ class ReportBookDiaryController extends Controller
 
         $pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
         $pdf->setOptions([
-            'page-size'=>'letter',
+            'page-size' => 'letter',
         ]);
         //$pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
-        return $pdf->stream("Reporte-".$dateInicio."_".$dateFin."_".$business->name.".pdf");
+        return $pdf->stream("Reporte-" . $dateInicio . "_" . $dateFin . "_" . $business->name . ".pdf");
     }
 
-    public function indexReportYearly(){
+    public function indexReportYearly()
+    {
 
         $minYear = Carbon::parse(Book::getYearOfFirstRecord())->firstOfYear()->format('Y');
         $maxYear = Carbon::parse(Book::getYearOfLastRecord())->format('Y');
         $categories = Category::whereNull("category_id")->with('categories')->get();
-        return view('admin.report_yearly.index', compact('minYear','maxYear','categories'));
+        return view('admin.report_yearly.index', compact('minYear', 'maxYear', 'categories'));
     }
 
-    public function getReportByYear(Request $request){
+    public function getReportByYear(Request $request)
+    {
         try {
-            $books = Book::getDetailsOfBooksByYear($request);
-            if($request->has('imprimir')){
+            if ($request->has('imprimir')) {
                 return $this->downloadBooksYearlyPdf($request);
             }
-            $view = view('admin.report_yearly.search',compact('books'))->render();
-            return response()->json(["codigo" => 1,'mensaje'=>"Consulta realizada correctamente",'view'=>$view,'books'=>$books]);
+            $books = Book::getDetailsOfBooksByYear($request);
+            $close = null;
+            $previousManagement=$request->previous_management;
+            if ($request->previous_management == 1) {
+                $previousYear = Carbon::parse($request->year . '-01-01')->subYear()->format('Y');
+                $close = CloseBox::getCloseBoxByYear($previousYear);
+            }
+            $view = view('admin.report_yearly.search', compact('books', 'close','previousManagement'))->render();
+            return response()->json(["codigo" => 1, 'mensaje' => "Consulta realizada correctamente", 'view' => $view, 'books' => $books]);
         } catch (\Throwable $th) {
-            return response()->json(["codigo" => 0,'mensaje'=>"La consulta no se  realizo ".$th->getMessage() ]);
+            return response()->json(["codigo" => 0, 'mensaje' => "La consulta no se  realizo " . $th->getMessage()]);
         }
     }
 
@@ -87,6 +96,12 @@ class ReportBookDiaryController extends Controller
     {
         $business = Business::getBusiness();
         $books = Book::getDetailsOfBooksByYear($request);
+        $close = null;
+        $previousManagement=$request->previous_management;
+        if ($request->previous_management == 1) {
+            $previousYear = Carbon::parse($request->year . '-01-01')->subYear()->format('Y');
+            $close = CloseBox::getCloseBoxByYear($previousYear);
+        }
         $year = $request->year;
         $saldo = (object)[
             "saldo_haber"  => array_sum(collect($books)->pluck('haber_saldo')->toArray()),
@@ -95,12 +110,15 @@ class ReportBookDiaryController extends Controller
         ];
         $category_id = $request->category_id;
         $category = Category::find($category_id, ['name']);
-        $pdf = SnappyPdf::loadView('pdf.download-books-yearly',
-        compact('books','year','business','saldo','category','category_id'));
+
+        $pdf = SnappyPdf::loadView(
+            'pdf.download-books-yearly',
+            compact('books', 'year', 'business', 'saldo', 'category', 'category_id','close','previousManagement')
+        );
         $pdf->setOptions([
-            'page-size'=>'letter',
+            'page-size' => 'letter',
         ]);
         //$pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
-        return $pdf->stream("Reporte-GESTION -".$year."_".$business->name.".pdf");
+        return $pdf->stream("Reporte-GESTION -" . $year . "_" . $business->name . ".pdf");
     }
 }

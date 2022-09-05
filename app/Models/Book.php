@@ -172,4 +172,15 @@ class Book extends Model
 
         return $books->get();
     }
+
+    public static function getAllYearWithoutYearNow(){
+        $yearNow = Carbon::now()->format('Y');
+        $years = Book::whereYear('date','!=',$yearNow)
+        ->selectRaw("DATE_FORMAT(date,'%Y') as new_date")
+        ->groupBy('new_date')
+        ->get()
+        ->pluck('new_date')
+        ->toArray();
+        return $years;
+    }
 }

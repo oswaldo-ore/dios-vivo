@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-auto mb-6 show_category_bloc"  style="display: none">
                         <div class="form-check form-check-custom form-check-solid form-check-sm">
-                            <input class="form-check-input search" type="checkbox" value="1" id="show_category" />
+                            <input class="form-check-input search" type="checkbox" id="show_category" />
                             <label class="form-check-label" for="show_category">
                                 Mostrar las categorias
                             </label>
@@ -72,6 +72,16 @@
                     </div>
                 </div>
             </form>
+            <div class="row show_category_bloc mb-6 " style="display: none">
+                <div class="col-auto "  >
+                    <div class="form-check form-check-custom form-check-solid form-check-sm">
+                        <input class="form-check-input search" type="checkbox" id="include_previous_management" />
+                        <label class="form-check-label" for="include_previous_management">
+                            Incluir la gestion anterior
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table table-hover table-rounded border gy-4 gs-4">
@@ -111,6 +121,7 @@
             var year = $('#year').val();
             var category_id = $('#category').val();
             var show_category = $('#show_category').is(':checked');
+            var include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
             $.ajax({
                 url:"{{route('report.getBookRangeYear')}}",
                 type:"GET",
@@ -118,6 +129,7 @@
                     category_id: category_id,
                     year: year,
                     show_category: show_category? 1:0,
+                    previous_management: include_previous_management,
                 },
                 success: function(response){
                     $('#cuerpo').html(response.view);
@@ -136,6 +148,7 @@
             var category_id = $('#category').val();
             if(category_id != 0){
                 $('#show_category').prop('checked',false);
+                $('#include_previous_management').prop('checked',false);
                 $('.show_category_bloc').hide();
             }else{
                 $('.show_category_bloc').show();
@@ -147,7 +160,8 @@
             var year = $('#year').val();
             var category_id = $('#category').val();
             var show_category = $('#show_category').is(':checked');
-            var url = `?category_id=${category_id}&year=${year}&show_category=${show_category?1:2}&imprimir=true`;
+            var include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
+            var url = `?category_id=${category_id}&year=${year}&show_category=${show_category?1:2}&imprimir=true&previous_management=${include_previous_management}`;
             url = "{{route('report.getBookRangeYear')}}"+url;
             window.open(url,'_blank');
         });

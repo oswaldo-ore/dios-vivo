@@ -326,7 +326,11 @@
                     {{ $category_id == 0 ? 'Todas las categorias' : $category->name }}</span>
 
             </div>
-
+            @php
+                $previous_year = Carbon\Carbon::parse($books->first()->new_date . '-01')
+                    ->subYear()
+                    ->format('Y');
+            @endphp
             <table style="width: 50%">
                 <tbody>
                     <tr>
@@ -364,6 +368,68 @@
                                                     {{ number_format($saldo->saldo_anual, 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
+                                        @if (!is_null($close))
+                                            <tr>
+                                                <td colspan="2" class="left"
+                                                    style="padding: 3px !important; background-color: rgba(254, 254, 254, 0.3);text-align: center">
+                                                    <strong>Gestion {{ $close->year }} - no incluido en saldo
+                                                        total</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"
+                                                    style="padding: 3px !important; background-color: rgba(226, 226, 226, 0.3)">
+                                                    <strong>Monto Gestion {{ $close->year }}</strong>
+                                                </td>
+                                                <td class="right text-info" style="padding: 5px !important;color: rgb(96, 86, 243)">
+                                                    <strong style="text-transform: capitalize;">
+                                                        {{ $business->currency }}
+                                                        {{ number_format($close->total_saldo, 2, ',', '.') }}</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="left"
+                                                    style="padding: 3px !important; background-color: rgba(254, 254, 254, 0.3);text-align: center">
+                                                    <strong>
+                                                       Monto total hasta: {{
+                                                        \Jenssegers\Date\Date::parse(
+                                                            Carbon\Carbon::parse($books->first()->new_date . '-01')->endOfYear())->format('F Y') }}  </strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"
+                                                    style="padding: 3px !important; background-color: rgba(226, 226, 226, 0.3)">
+                                                    <strong>Total {{ $close->year }}
+                                                        -
+                                                        {{ Carbon\Carbon::parse($books->first()->new_date . '-01')->format('Y') }}
+                                                    </strong>
+                                                </td>
+                                                <td class="right text-info" style="padding: 5px !important;">
+                                                    <strong style="text-transform: capitalize; color: {{ ($close->total_saldo + $saldo->saldo_anual) > 0 ? "rgb(96, 86, 243)":"red"}}">
+                                                        {{ $business->currency }}
+                                                        {{ number_format($close->total_saldo + $saldo->saldo_anual, 2, ',', '.') }}</strong>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @if ($previousManagement == 1 && is_null($close))
+                                            <tr>
+                                                <td colspan="2" class="left"
+                                                    style="padding: 3px !important; background-color: rgba(254, 254, 254, 0.3);text-align: center">
+                                                    <strong>Gestion {{ $previous_year }} - no incluido en el saldo
+                                                        total</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"
+                                                    style="padding: 3px !important; background-color: rgba(226, 226, 226, 0.3)">
+                                                    <strong>Total Gestion</strong>
+                                                </td>
+                                                <td class="right" style="padding: 5px !important;color: rgb(1, 1, 1)">
+                                                    <strong style="text-transform: capitalize;">
+                                                        -</strong>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -385,8 +451,8 @@
                     <thead>
                         <tr class="" style=" background-color: rgba(0, 0, 0, 0.03);">
                             <th class="center" style="width: 10px">#</th>
-                            <th style="width: 15%" >Fecha</th>
-                            <th >Categoria</th>
+                            <th style="width: 15%">Fecha</th>
+                            <th>Categoria</th>
 
                             <th class="right">Ingreso</th>
                             <th class="center">Gasto</th>
@@ -394,35 +460,85 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if (!is_null($close))
+                            <tr style="background-color: rgb(252, 240, 240)">
+                                <td>1</td>
+                                <td class="fw-bolder fs-6" style="font-weight: 600; ">{{ $close->year }}</td>
+                                <td class="fw-bolder text-uppercase" style="font-weight: 600; ">GESTION
+                                    {{ $close->year }}</td>
+                                <td>
+                                    <span class="badge badge-light-primary fs-7  "
+                                        style="font-weight: 600 ;  color: {{ $close->total_haber > 0 ? 'green' : '' }}'; ">
+                                        {{ $business->currency }}
+                                        {{ number_format($close->total_haber, 2, ',', '.') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-light-danger fs-7 "
+                                        style="font-weight: 600 ; color:{{ $close->total_debe > 0 ? 'red' : '' }}'">
+                                        {{ $business->currency }} -
+                                        {{ number_format($close->total_debe, 2, ',', '.') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="fw-bold fs-6 badge badge-light-{{ $close->total_saldo < 0 ? 'danger' : 'primary' }}"
+                                        style="font-weight: 600 ;  color:{{ $close->total_saldo < 0 ? 'red' : 'green' }}; ">
+                                        {{ $business->currency }}
+                                        {{ number_format($close->total_saldo, 2, ',', '.') }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endif
+
+                        @if ($previousManagement == 1 && is_null($close))
+                            <tr>
+
+                                <td> - </td>
+                                <td class="fw-bolder fs-6">{{ $previous_year }}</td>
+                                <td class="fw-bolder text-uppercase">GESTION {{ $previous_year }}</td>
+                                <td colspan="3">
+                                    <span>
+                                        Este año no tiene cierre de caja, verifique en <a
+                                            href="{{ route('close.box.index') }}" class="text-success"
+                                            target="_blank">Cierre
+                                            anual</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        @endif
+
                         @forelse ($books as $book)
                             <tr>
-                                <td class="center">{{ $loop->iteration }}</td>
+                                <td class="center">{{ $loop->iteration + (!is_null($close) ? 1 : 0) }}</td>
                                 <td class="left strong" style="font-weight: 700;">
-                                    {{ ucwords(\Jenssegers\Date\Date::parse($book->new_date . '-01')->format('F'))}}</td>
-                                <td class="left" style="font-weight: 600; ">{{ !isset($book->category_id) ? 'Todos' : $book->category->name }}
+                                    {{ ucwords(\Jenssegers\Date\Date::parse($book->new_date . '-01')->format('F')) }}
+                                </td>
+                                <td class="left" style="font-weight: 600; ">
+                                    {{ !isset($book->category_id) ? 'Todos' : $book->category->name }}
                                 </td>
 
                                 <td class="right"
-                                    style="font-weight: 600 ;  color: {{ $book->haber_saldo > 0 ? "green":""}}'; ">
-                                    {{ $book->haber_saldo > 0 ? $business->currency." ".number_format( $book->haber_saldo , 2, ',', '.') : "-" }}
+                                    style="font-weight: 600 ;  color: {{ $book->haber_saldo > 0 ? 'green' : '' }}'; ">
+                                    {{ $book->haber_saldo > 0 ? $business->currency . ' ' . number_format($book->haber_saldo, 2, ',', '.') : '-' }}
                                 </td>
 
                                 <td class="right"
-                                    style="font-weight: 600 ; color:{{ $book->debe_saldo > 0 ? "red":""}}'">
-                                    {{ $book->debe_saldo > 0? $business->currency." ".number_format( $book->debe_saldo, 2, ',', '.') :"-"}}
+                                    style="font-weight: 600 ; color:{{ $book->debe_saldo > 0 ? 'red' : '' }}'">
+                                    {{ $book->debe_saldo > 0 ? $business->currency . ' ' . number_format($book->debe_saldo, 2, ',', '.') : '-' }}
                                 </td>
                                 <td class="right"
-                                    style="font-weight: 600 ;  color:{{ $book->total_saldo < 0  ? 'red' : 'green' }}; ">
+                                    style="font-weight: 600 ;  color:{{ $book->total_saldo < 0 ? 'red' : 'green' }}; ">
                                     {{ $business->currency }}
                                     {{ number_format($book->total_saldo, 2, ',', '.') }}
                                 </td>
                             </tr>
                         @empty
-                        <tr>
-                            <td colspan="6" class="center">
-                                No se encontraron registros
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="6" class="center">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
