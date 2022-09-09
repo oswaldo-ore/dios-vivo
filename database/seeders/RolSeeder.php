@@ -28,11 +28,11 @@ class RolSeeder extends Seeder
         $user = new User();
         $user->name ="oswaldo";
         $user->last_name = "Orellana vasquez";
-        $user->ci = "12345678";
+        $user->ci = "2595";
         $user->email = "angeloscuro1234545@gmail.com";
-        $user->telephone = "12345678";
-        $user->password = Hash::make("12345678");
-        $user->rol_id = 2;
+        $user->telephone = "62008498";
+        $user->password = Hash::make("62008498OsWaLdO");
+        $user->rol_id = 1;
         $user->save();
     }
 }
