@@ -49,7 +49,7 @@
             <div class="form-group mb-4">
                 <label for="" class="form-label required"> Precio: </label>
                 <input type="text" class="form-control form-control-sm form-control-solid" value="0"
-                    placeholder="Ingrese un precio" name="price_description" required autocomplete="off">
+                    placeholder="Ingrese un precio" name="price_description"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required autocomplete="off">
             </div>
         </div>
         <div class="col-md-1 align-self-end text-end mb-4">
@@ -86,7 +86,7 @@
                     precio_total += parseFloat(description.price);
                 });
                 $('#more_description').text(description_cad);
-                $('#amount').val(precio_total);
+                $('#amount').val(precio_total.toFixed(2));
                 $('#modal_more_description').modal('hide');
             }
 

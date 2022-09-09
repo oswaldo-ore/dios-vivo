@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Business;
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,10 +22,9 @@ class DashboardController extends Controller
 
     public function indexByGestion()
     {
-        $year = Carbon::now()->year;
-        //suma total de las categorias con sus respectivas clases
-        $year= Category::totalByCategoryByYear($year);
-
-        return view('admin.dashboard.index',compact('year'));
+        $business = Business::getBusiness();
+        $statistics = Book::getDetailsOfBooksByMonthsAll();
+        $statisticsYear = Book::getDetailsOfBooksByYearAll();
+        return view('admin.dashboard.index-management',compact('business','statistics','statisticsYear'));
     }
 }

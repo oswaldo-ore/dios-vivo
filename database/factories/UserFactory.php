@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Rol;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -20,7 +21,7 @@ class UserFactory extends Factory
             'last_name'=> $this->faker->lastName(),
             'ci' => $this->faker->unique()->numberBetween(1000000,200000),
             'telephone'=> $this->faker->phoneNumber(),
-            'rol_id' => 2,
+            'rol_id' => Rol::where('id','!=', 1)->inRandomOrder()->limit(2)->first()->id,
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

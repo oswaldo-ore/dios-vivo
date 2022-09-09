@@ -18,25 +18,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Business::getBusiness();
-        $rol = new Rol();
-        $rol->name = "super admin";
-        $rol->save();
-        $rol1 = new Rol();
-        $rol1->name = "administrador";
-        $rol1->save();
-        // \App\Models\User::factory(10)->create();
-        $user = new User();
-        $user->name ="oswaldo";
-        $user->last_name = "Orellana vasquez";
-        $user->ci = "12345678";
-        $user->email = "angeloscuro1234545@gmail.com";
-        $user->telephone = "12345678";
-        $user->password = Hash::make("12345678");
-        $user->rol_id = $rol->id;
-        $user->save();
+
+
+
         $this->call([
+            RolSeeder::class,
             CategorySeeder::class,
-            BookSeeder::class,
+            //BookSeeder::class,
         ]);
+
+        User::factory(10)->create();
     }
 }

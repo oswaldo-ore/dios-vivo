@@ -80,7 +80,6 @@
         </div>
     </div>
 @endsection
-
 @push('js')
     <script src="{{ asset('flatpickr-locale-es.js') }}"></script>
     <script src="{{ asset('yearpicker.js') }}"></script>
@@ -106,10 +105,9 @@
                 }
             }
         }
-
         $("#year").yearpicker({
-            startYear: '{{ $years[0] }}',
-            endYear: "{{ $years[count($years) - 1] }}",
+            startYear: '{{ !empty($years) ? $years[0] : (Carbon\Carbon::now()->format('Y')) }}',
+            endYear: "{{ !empty($years) ? $years[count($years) - 1] : (Carbon\Carbon::now()->format('Y'))  }}",
             onChange: verifyYear
         });
 

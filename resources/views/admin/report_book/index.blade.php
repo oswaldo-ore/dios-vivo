@@ -207,9 +207,9 @@
             var contador = 0;
             var total_debe = 0;
             var total_haber = 0;
-            var more_description_string = "";
 
             books.forEach(function(book, index) {
+                var more_description_string = "";
                 if(book.more_description.length > 0 ){
                     more_description_string = ":<br>";
                     book.more_description.forEach((moreDescription, index, array) => {

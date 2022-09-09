@@ -27,8 +27,8 @@
                         <label class="required form-label">Nombre de la empresa:</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Ingrese nombre de la institucion" id="name" name="name" maxlength="70" value="{{$business->name}}" required />
+                        <input class="form-control form-control-sm form-control-solid" autocomplete="new-name"
+                            placeholder="Ingrese nombre de la institucion" id="name" name="name"  maxlength="70" value="{{$business->name}}" required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-6 fv-row fv-plugins-icon-container col-md-6">

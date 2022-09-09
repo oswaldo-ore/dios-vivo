@@ -67,11 +67,11 @@ Route::middleware(["auth"])->group(function () {
     Route::get('users/{user}/changeState', [UserController::class, 'changeState'])->name('user.change');
 
 
-    Route::get('rols/',[RolController::class,'index'])->name('rols.index');
+    /*Route::get('rols/',[RolController::class,'index'])->name('rols.index');
     Route::post('rols/',[RolController::class,'store'])->name('rols.store');
     Route::put('rols/{user}', [RolController::class, 'update'])->name('rols.update');
     Route::delete('rols/{user}', [RolController::class, 'destroy'])->name('user.destroy');
-    Route::get('rols/{user}/changeState', [RolController::class, 'changeState'])->name('user.change');
+    Route::get('rols/{user}/changeState', [RolController::class, 'changeState'])->name('user.change');*/
 
 });
 Auth::routes();

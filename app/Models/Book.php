@@ -33,6 +33,7 @@ class Book extends Model
         $books = [];
         $total_debe = 0;
         $total_haber = 0;
+
         foreach ($datas as $key => $data) {
             //activo y gasto => debe --> pasivo e ingresos --> haber
             $debe = $data->type == "egreso" ? $data->amount : 0;
@@ -50,10 +51,10 @@ class Book extends Model
             $book->save();
             $moreDescription = [];
             $dataMore = json_decode(json_encode($data->more_description),true);
-            foreach ($dataMore as $more_description) {
+            foreach ($dataMore as $dataM) {
                 $moreDescription[] = [
-                    'nombre' => $more_description['name'],
-                    'precio' => $more_description['price'],
+                    'nombre' => $dataM['name'],
+                    'precio' => $dataM['price'],
                     "created_at" => Carbon::now(),
                     "updated_at" => Carbon::now(),
                     'book_id' => $book->id,
@@ -83,7 +84,9 @@ class Book extends Model
     public static function getDetailsOfBookInRangeDate($dateStar, $dateEnd, $categoryId)
     {
         if ($categoryId == 0) {
-            $books = Book::with('category:id,name')
+            $books = Book::with(['category' => function($query){
+                $query->withTrashed()->select('id','name','deleted_at');
+            }])
                 ->with('moreDescription')
                 ->where("date", ">=", $dateStar)
                 ->where('date', '<=', $dateEnd)
@@ -171,6 +174,41 @@ class Book extends Model
         //todas las categorias
 
         return $books->get();
+    }
+
+    public static function getDetailsOfBooksByMonthsAll(){
+
+        $books = Book::selectRaw("
+            count('id') as amount,
+            DATE_FORMAT(date,'%m-%Y') as new_date,
+            cast( sum(haber) as decimal(20,2)) as haber,
+            cast( sum(debe) as decimal(20,2)) as debe,
+            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
+            cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
+            cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
+        ")
+        ->orderBy('date')
+        ->groupBy('new_date')
+        ->get();
+        return $books;
+    }
+    public static function getDetailsOfBooksByYearAll(){
+
+        $books = Book::selectRaw("
+            count('id') as amount,
+            DATE_FORMAT(date,'%Y') as new_date,
+            cast( sum(haber) as decimal(20,2)) as haber,
+            cast( sum(debe) as decimal(20,2)) as debe,
+            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
+            cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
+            cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
+        ")
+        ->orderBy('date')
+        ->groupBy('new_date')
+        ->get();
+        return $books;
     }
 
     public static function getAllYearWithoutYearNow(){
