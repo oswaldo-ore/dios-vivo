@@ -36,8 +36,9 @@ return [
     'pdf' => [
         'enabled' => true,
         //'binary'  => env('WKHTML_PDF_BINARY', '/usr/local/bin/wkhtmltopdf'),
-        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
+        //'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
         'timeout' => false,
+        'binary'  => 'wkhtmltopdf',
         'options' => [
             'enable-local-file-access' => true,
             'encoding'      => 'UTF-8'
