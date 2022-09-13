@@ -36,9 +36,9 @@ return [
     'pdf' => [
         'enabled' => true,
         //'binary'  => env('WKHTML_PDF_BINARY', '/usr/local/bin/wkhtmltopdf'),
-        //'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
+        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
         'timeout' => false,
-        'binary'  => 'wkhtmltopdf',
+        //'binary'  => 'wkhtmltopdf',
         'options' => [
             'enable-local-file-access' => true,
             'encoding'      => 'UTF-8'
@@ -49,8 +49,8 @@ return [
     'image' => [
         'enabled' => true,
         //'binary'  => env('WKHTML_IMG_BINARY', '/usr/local/bin/wkhtmltoimage'),
-        //'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage"',
-        'binary'  => 'wkhtmltopdf',
+        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage"',
+        //'binary'  => 'wkhtmltopdf',
         'timeout' => false,
         'options' => [
             'enable-local-file-access' => true,
