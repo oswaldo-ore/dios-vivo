@@ -113,7 +113,7 @@
 
         $('#generate_close_box').click(function(){
             var year = $('#year').val();
-            url = "{{url('close-box/close')}}/"+year;
+            url = "{{url('admin/close-box/close')}}/"+year;
             window.open(url,'_blank');
         });
 

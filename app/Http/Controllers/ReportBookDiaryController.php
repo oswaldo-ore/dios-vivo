@@ -88,7 +88,7 @@ class ReportBookDiaryController extends Controller
             $view = view('admin.report_yearly.search', compact('books', 'close','previousManagement'))->render();
             return response()->json(["codigo" => 1, 'mensaje' => "Consulta realizada correctamente", 'view' => $view, 'books' => $books]);
         } catch (\Throwable $th) {
-            return response()->json(["codigo" => 0, 'mensaje' => "La consulta no se  realizo " . $th->getMessage()]);
+            return response()->json(["codigo" => 0, 'mensaje' => "La consulta no se  realizo " . $th->getTraceAsString()]);
         }
     }
 

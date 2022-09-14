@@ -327,7 +327,7 @@
 
             </div>
             @php
-                $previous_year = Carbon\Carbon::parse($books->first()->new_date . '-01')
+                $previous_year = Carbon\Carbon::parse($year . '-01-01')
                     ->subYear()
                     ->format('Y');
             @endphp
