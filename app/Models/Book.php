@@ -170,7 +170,7 @@ class Book extends Model
             cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
             cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
             cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
-        ")->groupBy('new_date');
+        ")->groupBy('date');
         //todas las categorias
 
         return $books->get();
@@ -215,7 +215,7 @@ class Book extends Model
         $yearNow = Carbon::now()->format('Y');
         $years = Book::whereYear('date','!=',$yearNow)
         ->selectRaw("DATE_FORMAT(date,'%Y') as new_date")
-        ->groupBy('new_date')
+        ->groupBy('date')
         ->get()
         ->pluck('new_date')
         ->toArray();
