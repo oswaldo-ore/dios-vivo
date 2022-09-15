@@ -197,7 +197,7 @@
 
     <div class="menu-item">
         <a class="menu-link" id="menu-business" href="{{ route('business.index') }}"
-            title="Configuracion de la empresa" data-bs-toggle="tooltip" data-bs-trigger="hover"
+            title="Configuracion de la organización" data-bs-toggle="tooltip" data-bs-trigger="hover"
             data-bs-dismiss="click" data-bs-placement="right">
             <span class="menu-icon">
 
@@ -220,7 +220,7 @@
                     <!--end::Svg Icon-->
                 </span>
             </span>
-            <span class="menu-title">Empresa</span>
+            <span class="menu-title">Organización</span>
         </a>
     </div>
 

@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         try {
             $user = User::createUser($request);
-            return redirect('users')->with('success','Usuario registrado correctamente');
+            return redirect('admin/users')->with('success','Usuario registrado correctamente');
         } catch (\Throwable $th) {
             return back()->with('error','No se pudo crear el usuario'.$th->getMessage());
         }
@@ -81,7 +81,7 @@ class UserController extends Controller
     {
         try {
             $user = User::updateUser($request,$user);
-            return redirect('users')->with('success','Usuario actualizado correctamente');
+            return redirect('admin/users')->with('success','Usuario actualizado correctamente');
         } catch (\Throwable $th) {
             return back()->with('error','No se pudo actualizar el usuario'.$th->getMessage());
         }
@@ -106,7 +106,7 @@ class UserController extends Controller
     {
         try {
             $user->deleteOrFail();
-            return redirect('users')->with("success", "Eliminado con éxito");
+            return redirect('admin/users')->with("success", "Eliminado con éxito");
         } catch (\Throwable $th) {
             return back()->with("error", "No se pudo eliminar el usuario");
         }
