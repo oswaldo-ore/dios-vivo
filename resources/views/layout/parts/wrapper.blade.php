@@ -56,7 +56,7 @@
                 <!--end::Menu separator-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <a href="../../demo1/dist/account/overview.html" class="menu-link px-5">Mi perfil
+                    <a href="{{ route('user.profile', ['user'=> auth()->user()->id ]) }}" class="menu-link px-5">Mi perfil
                     </a>
                 </div>
                 <!--end::Menu item-->

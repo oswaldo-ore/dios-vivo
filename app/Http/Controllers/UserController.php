@@ -111,4 +111,17 @@ class UserController extends Controller
             return back()->with("error", "No se pudo eliminar el usuario");
         }
     }
+
+    public function myProfile(User $user){
+        $user->rol;
+        return view('admin.users.update',compact('user'));
+    }
+    public function myProfileUpdate(Request $request,User $user){
+        try {
+           User::updateMyProfile($request,$user);
+            return response()->json(['codigo'=> 0,"message"=>"Perfil actualizado con éxito","data" => $user]);
+        } catch (\Throwable $th) {
+            return response()->json(['codigo'=> 0,"message"=>"No se pudo actualizar el usuario ".$th->getTraceAsString(),"data" => ""]);
+        }
+    }
 }

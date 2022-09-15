@@ -66,6 +66,8 @@ Route::prefix('admin')->group(function(){
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::get('users/{user}/changeState', [UserController::class, 'changeState'])->name('user.change');
+        Route::get('users/profile/{user}', [UserController::class, 'myProfile'])->name('user.profile');
+        Route::put('users/profile/{user}/update', [UserController::class, 'myProfileUpdate'])->name('user.profile.update');
 
 
         /*Route::get('rols/',[RolController::class,'index'])->name('rols.index');
