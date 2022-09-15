@@ -103,15 +103,16 @@ class User extends Authenticatable
     }
 
     public static function updateMyProfile($request,$user){
+        $password = $user->password;
         if($request->has('change_password')){
-            $user->password = Hash::make($request->new_password);
+            $password = Hash::make($request->new_password);
         }
         return $user->update([
             'name' => $request->name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'telephone' => $request->telephone,
-            'password' => $user->password,
+            'password' => $password,
         ]);
     }
 }

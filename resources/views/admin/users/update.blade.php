@@ -66,7 +66,7 @@
                 <div class="row mb-6">
                    <div class="col-md-12">
                     <div class="form-check form-check-custom form-check-solid form-check-sm">
-                        <input class="form-check-input" type="checkbox" value="" id="change_password"/>
+                        <input class="form-check-input" type="checkbox" value="" name="change_password" id="change_password"/>
                         <label for="change_password" class="form-check-label">Cambiar contraseña</label>
                     </div>
                    </div>
