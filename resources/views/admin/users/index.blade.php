@@ -73,7 +73,7 @@
         });
 
         function changeStateUser(id) {
-            url = "{{url('/')}}/users/" + id + "/changeState";
+            url = "{{url('/')}}/admin/users/" + id + "/changeState";
             $.ajax({
                 type: "GET",
                 url: url,
