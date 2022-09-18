@@ -12,7 +12,7 @@
         <div class="aside-logo flex-column-auto bg-dark" id="kt_aside_logo">
             <!--begin::Logo-->
             <a href="#">
-                <img alt="Logo" src="{{asset('/assets/media/logos/logo-1-dark.svg')}}" class="h-25px logo" />
+                <img alt="Logo" src="{{asset('/assets/media/dios-vivo-dark.svg')}}" class="h-40px logo" />
             </a>
             <!--end::Logo-->
             <!--begin::Aside toggler-->
@@ -85,8 +85,8 @@
                 <!--end::Aside mobile toggle-->
                 <!--begin::Mobile logo-->
                 <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                    <a href="../../demo1/dist/index.html" class="d-lg-none">
-                        <img alt="Logo" src="{{asset('/assets/media/logos/logo-2.svg')}}" class="h-30px" />
+                    <a href="{{route('dashboard.index')}}" class="d-lg-none">
+                        <img alt="Logo" src="{{asset('/assets/media/dios-vivo-logo.png')}}" class="h-30px" />
                     </a>
                 </div>
                 <!--end::Mobile logo-->
