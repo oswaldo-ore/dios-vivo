@@ -34,7 +34,7 @@ class CategoryController extends Controller
         $category->category_id = $request->category_id;
         $category->save();
 
-        return redirect('category')->with("success", "Agregado con éxito");
+        return redirect('/admin/category')->with("success", "Agregado con éxito");
     }
 
 
@@ -53,9 +53,9 @@ class CategoryController extends Controller
 
             $category->update();
 
-            return redirect('category')->with("success", "Actualizado con éxito");
+            return redirect('/admin/category')->with("success", "Actualizado con éxito");
         } catch (\Throwable $th) {
-            return redirect('category')->with("error", "No se pudo actualizar la categoría");
+            return redirect('/admin/category')->with("error", "No se pudo actualizar la categoría");
         }
     }
 
@@ -78,6 +78,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect('category')->with("success", "Eliminado con éxito");
+        return redirect('/admin/category')->with("success", "Eliminado con éxito");
     }
 }

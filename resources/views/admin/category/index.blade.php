@@ -158,7 +158,7 @@
         });
 
         function changeStateCategory(id) {
-            url = "{{url('/')}}/category/" + id + "/changeState";
+            url = "{{url('/')}}/admin/category/" + id + "/changeState";
             $.ajax({
                 type: "GET",
                 url: url,
