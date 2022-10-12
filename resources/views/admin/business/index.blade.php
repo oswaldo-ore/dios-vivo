@@ -37,7 +37,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" type="email" autocomplete="off"
-                            placeholder="Ingrese el correo electronico" required id="email" name="email" maxlength="30" value="{{$business->email }}" />
+                            placeholder="Ingrese el correo electronico" required id="email" name="email" maxlength="70" value="{{$business->email }}" />
                         <!--end::Input-->
                     </div>
                     <div class="mb-6 fv-row fv-plugins-icon-container col-md-12">
