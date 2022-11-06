@@ -106,7 +106,13 @@
                         <!--end::Input-->
                     </div>
 
-                    <div class="col-md-12 mostrar_reportes">
+                    <div class="col-md-12 mostrar_reportes mt-6">
+                        <div class="col-md-12">
+                            <h4>
+                                Reporte Publico
+                            </h4>
+                        </div>
+
                         <div class="mb-6 fv-row fv-plugins-icon-container col-md-12">
                             <!--begin::Input-->
                             <div class="form-check form-check-custom form-check-solid">
@@ -115,10 +121,6 @@
                                 <input class="form-check-input me-3" type="checkbox"
                                     {{ $business->show_report_public || $business->show_report_yearly ? 'checked' : '' }}
                                     id="show_report_to_public_view" />
-                                    @if ($business->show_report_public || $business->show_report_yearly)
-                                        <a id="report_public_cancel" class="btn btn-sm btn-danger"> Cancelar </a>
-                                    @endif
-
                             </div>
                             <!--end::Input-->
                         </div>
@@ -185,6 +187,11 @@
                                     placeholder="Seleccione una fecha" id="date_close_show" name="date_close_show"
                                     type="date" />
                             </div>
+                        </div>
+                        <div class="col-md-12">
+                            @if ($business->show_report_public || $business->show_report_yearly)
+                                        <a id="report_public_cancel" class="btn btn-sm btn-danger"> Cancelar Reporte Publico </a>
+                                    @endif
                         </div>
                     </div>
 
