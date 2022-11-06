@@ -214,7 +214,7 @@
     <br>
     <br>
 
-    @if (!isset($background))
+    @if (!isset($background) && !Route::is('report.public'))
         <div class="position-relative">
             <div class="position-absolute top-0 start-0">
                 <form action="{{ route('download.book.pdf') }}" method="get">
