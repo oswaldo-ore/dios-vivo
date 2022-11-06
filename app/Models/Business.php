@@ -11,7 +11,8 @@ class Business extends Model
     use HasFactory;
     use SoftDeletes;
     protected $fillable=[
-        'name','location','code_number','phone_number','currency','saldo_total'
+        'name','location','code_number','phone_number','currency','saldo_total',
+        'show_report_public','start_date_report_public','end_date_report_public','show_report_yearly','start_report_year','date_close_show'
     ];
 
     public static function getBusiness(){

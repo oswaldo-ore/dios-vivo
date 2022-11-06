@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',function(){
     return redirect('admin/');
 });
+Route::prefix('reporte')->group(function(){
+    Route::get('/',[BusinessController::class,"showReportPublic"]);
+});
 Route::prefix('admin')->group(function(){
     Route::middleware(["auth"])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -62,6 +65,7 @@ Route::prefix('admin')->group(function(){
 
         Route::get('business',[BusinessController::class,'index'])->name('business.index');
         Route::put('business/{business}',[BusinessController::class,'update'])->name('business.update');
+        Route::post('business/clear/report/public',[BusinessController::class,'clearReportPublic'])->name('business.clear.report.public');
 
         Route::get('users/',[UserController::class,'index'])->name('users.index');
         Route::post('users/',[UserController::class,'store'])->name('users.store');
