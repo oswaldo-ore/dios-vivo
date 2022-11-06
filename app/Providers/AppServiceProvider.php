@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Business;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,11 +32,16 @@ class AppServiceProvider extends ServiceProvider
         }
 
         view()->composer('*',function($view){
+            $business = Business::getBusiness();
             if(auth()->check()){
                 $business = Business::getBusiness();
-
-            $view->with(compact('business'));
+                $view->with(compact('business'));
             }
+            if(Route::is('report.public')){
+                $view->with(compact('business'));
+            }
+
+
         });
     }
 }

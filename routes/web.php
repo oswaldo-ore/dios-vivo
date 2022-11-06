@@ -27,7 +27,7 @@ Route::get('/',function(){
     return redirect('admin/');
 });
 Route::prefix('reporte')->group(function(){
-    Route::get('/',[BusinessController::class,"showReportPublic"]);
+    Route::get('/',[BusinessController::class,"showReportPublic"])->name('report.public');
 });
 Route::prefix('admin')->group(function(){
     Route::middleware(["auth"])->group(function () {
