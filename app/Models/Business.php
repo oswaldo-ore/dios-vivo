@@ -32,6 +32,17 @@ class Business extends Model
         }
     }
 
+    public function disabledReportPublic(){
+        $this->show_report_public = false;
+        $this->start_date_report_public = null;
+        $this->end_date_report_public = null;
+
+        $this->show_report_yearly = false;
+        $this->start_report_year = null;
+        $this->date_close_show = null;
+        $this->update();
+    }
+
     public function getNameAttribute($name){
         return ucwords($name);
     }
