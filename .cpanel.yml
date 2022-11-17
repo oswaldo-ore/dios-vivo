@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOY=/home/iglesiadiosvivo/public_html/
-    - /bin/rsync -a --exclude 'index.php' public/ $DEPLOY
+    - /bin/rsync -a --exclude 'index.php' -r public/ $DEPLOY
