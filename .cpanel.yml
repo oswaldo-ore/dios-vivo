@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOY=/home/iglesiadiosvivo/public_html/
-    - /bin/rsync -ar --exclude 'index.php' public/ $DEPLOY
+    - export DEPLOYPATH=/home/iglesiadiosvivo/public_html/
+    - /bin/rsync -ar --exclude 'index.php' public/ $DEPLOYPATH
