@@ -170,7 +170,7 @@ class Book extends Model
             cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
             cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
             cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
-        ")->groupBy('new_date');
+        ")->groupBy('new_date')->orderBy('new_date');
         //todas las categorias
 
         return $books->get();
