@@ -155,10 +155,10 @@ class Book extends Model
             if($category_id == 1 || $category_id == 2){
                 $categories_id = Category::withTrashed()->find($category_id)->categories->pluck('id')->toArray();
             }
-            $books->whereIn('category_id',$categories_id)->selectRaw('category_id')->groupBy('category_id')->orderBy('date')->with('category:id,name');
+            $books->whereIn('category_id',$categories_id)->selectRaw('category_id')->groupBy('category_id')->orderBy('category_id')->with('category:id,name');
         }
         if($show_category == 1 && $category_id == 0 ){
-            $books->selectRaw('category_id')->groupBy('category_id')->orderBy('date')->with('category:id,name');
+            $books->selectRaw('category_id')->groupBy('category_id')->orderBy('category_id')->with('category:id,name');
         }
 
         $books->selectRaw("

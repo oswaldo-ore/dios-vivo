@@ -107,7 +107,7 @@
     <script src="{{ asset('flatpickr-locale-es.js') }}"></script>
     <script src="{{ asset('yearpicker.js') }}"></script>
     <script>
-        var gestionYear = [];
+        let gestionYear = [];
 
         function getGestion(value) {
             if (value != null) {
@@ -118,10 +118,10 @@
             }
         }
         function getGestionOnlyMonth(){
-            var year = $('#year').val();
-            var category_id = $('#category').val();
-            var show_category = $('#show_category').is(':checked');
-            var include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
+            let year = $('#year').val();
+            let category_id = $('#category').val();
+            let show_category = $('#show_category').is(':checked');
+            let include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
             $.ajax({
                 url:"{{route('report.getBookRangeYear')}}",
                 type:"GET",
@@ -145,7 +145,7 @@
             onChange: getGestion
         });
         $('.search').on('change',function(){
-            var category_id = $('#category').val();
+            let category_id = $('#category').val();
             if(category_id != 0){
                 $('#show_category').prop('checked',false);
                 $('#include_previous_management').prop('checked',false);
@@ -157,11 +157,11 @@
         });
 
         $('#generate_report_year').click(function(){
-            var year = $('#year').val();
-            var category_id = $('#category').val();
-            var show_category = $('#show_category').is(':checked');
-            var include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
-            var url = `?category_id=${category_id}&year=${year}&show_category=${show_category?1:2}&imprimir=true&previous_management=${include_previous_management}`;
+            let year = $('#year').val();
+            let category_id = $('#category').val();
+            let show_category = $('#show_category').is(':checked');
+            let include_previous_management = $('#include_previous_management').is(':checked') ? 1 : 2;
+            let url = `?category_id=${category_id}&year=${year}&show_category=${show_category?1:2}&imprimir=true&previous_management=${include_previous_management}`;
             url = "{{route('report.getBookRangeYear')}}"+url;
             window.open(url,'_blank');
         });
