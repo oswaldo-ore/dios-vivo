@@ -8,7 +8,8 @@ use App\Models\Category;
 use App\Models\CloseBox;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Barryvdh\Snappy\Facades\SnappyPdf;
+use SnappyPDF;
+use DomPDF;
 use Carbon\Carbon;
 
 class ReportBookDiaryController extends Controller
@@ -55,7 +56,7 @@ class ReportBookDiaryController extends Controller
         $background = "si";
         $business = Business::getBusiness();
 
-        $pdf = SnappyPdf::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
+        $pdf = SnappyPDF::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
         $pdf->setOptions([
             'page-size' => 'letter',
         ]);
@@ -111,7 +112,7 @@ class ReportBookDiaryController extends Controller
         $category_id = $request->category_id;
         $category = Category::find($category_id, ['name']);
 
-        $pdf = SnappyPdf::loadView(
+        $pdf = SnappyPDF::loadView(
             'pdf.download-books-yearly',
             compact('books', 'year', 'business', 'saldo', 'category', 'category_id','close','previousManagement')
         );
