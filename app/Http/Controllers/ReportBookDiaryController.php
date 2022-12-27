@@ -9,7 +9,7 @@ use App\Models\CloseBox;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use SnappyPDF;
-use DomPDF;
+use Barryvdh\DomPDF\Facade\Pdf as DomPDF;
 use Carbon\Carbon;
 
 class ReportBookDiaryController extends Controller
@@ -56,7 +56,8 @@ class ReportBookDiaryController extends Controller
         $background = "si";
         $business = Business::getBusiness();
 
-        $pdf = SnappyPDF::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
+        //$pdf = SnappyPDF::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
+        $pdf = DomPDF::loadView('pdf.download-books', compact('books', 'dateInicio', 'dateFin', 'category_id', 'category', 'background'));
         $pdf->setOptions([
             'page-size' => 'letter',
         ]);
@@ -81,15 +82,15 @@ class ReportBookDiaryController extends Controller
             }
             $books = Book::getDetailsOfBooksByYear($request);
             $close = null;
-            $previousManagement=$request->previous_management;
+            $previousManagement = $request->previous_management;
             if ($request->previous_management == 1) {
                 $previousYear = Carbon::parse($request->year . '-01-01')->subYear()->format('Y');
                 $close = CloseBox::getCloseBoxByYear($previousYear);
             }
-            $view = view('admin.report_yearly.search', compact('books', 'close','previousManagement'))->render();
+            $view = view('admin.report_yearly.search', compact('books', 'close', 'previousManagement'))->render();
             return response()->json(["codigo" => 1, 'mensaje' => "Consulta realizada correctamente", 'view' => $view, 'books' => $books]);
         } catch (\Throwable $th) {
-            return response()->json(["codigo" => 0, 'mensaje' => "La consulta no se  realizo " . $th->getTraceAsString()." ".$th->getMessage()]);
+            return response()->json(["codigo" => 0, 'mensaje' => "La consulta no se  realizo " . $th->getTraceAsString() . " " . $th->getMessage()]);
         }
     }
 
@@ -98,7 +99,7 @@ class ReportBookDiaryController extends Controller
         $business = Business::getBusiness();
         $books = Book::getDetailsOfBooksByYear($request);
         $close = null;
-        $previousManagement=$request->previous_management;
+        $previousManagement = $request->previous_management;
         if ($request->previous_management == 1) {
             $previousYear = Carbon::parse($request->year . '-01-01')->subYear()->format('Y');
             $close = CloseBox::getCloseBoxByYear($previousYear);
@@ -112,9 +113,13 @@ class ReportBookDiaryController extends Controller
         $category_id = $request->category_id;
         $category = Category::find($category_id, ['name']);
 
-        $pdf = SnappyPDF::loadView(
+        // $pdf = SnappyPDF::loadView(
+        //     'pdf.download-books-yearly',
+        //     compact('books', 'year', 'business', 'saldo', 'category', 'category_id', 'close', 'previousManagement')
+        // );
+        $pdf = DomPDF::loadView(
             'pdf.download-books-yearly',
-            compact('books', 'year', 'business', 'saldo', 'category', 'category_id','close','previousManagement')
+            compact('books', 'year', 'business', 'saldo', 'category', 'category_id', 'close', 'previousManagement')
         );
         $pdf->setOptions([
             'page-size' => 'letter',

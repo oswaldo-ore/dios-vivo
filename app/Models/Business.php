@@ -10,29 +10,32 @@ class Business extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable=[
-        'name','location','code_number','phone_number','currency','saldo_total',
-        'show_report_public','start_date_report_public','end_date_report_public','show_report_yearly','start_report_year','date_close_show'
+    protected $fillable = [
+        'name', 'location', 'code_number', 'phone_number', 'currency', 'saldo_total',
+        'show_report_public', 'start_date_report_public', 'end_date_report_public', 'show_report_yearly', 'start_report_year', 'date_close_show'
     ];
 
-    public static function getBusiness(){
+    public static function getBusiness()
+    {
         $business = Business::first();
-        if(is_null($business)){
+        if (is_null($business)) {
             $business = new Business();
             $business->save();
         }
         return $business;
     }
 
-    public static function updateSaldoTotal($monto){
+    public static function updateSaldoTotal($monto)
+    {
         $business = Business::first();
-        if(!is_null($business)){
+        if (!is_null($business)) {
             $business->saldo_total = $business->saldo_total + $monto;
             $business->update();
         }
     }
 
-    public function disabledReportPublic(){
+    public function disabledReportPublic()
+    {
         $this->show_report_public = false;
         $this->start_date_report_public = null;
         $this->end_date_report_public = null;
@@ -43,10 +46,18 @@ class Business extends Model
         $this->update();
     }
 
-    public function getNameAttribute($name){
+    public function getNameAttribute($name)
+    {
         return ucwords($name);
     }
-    public function getCurrencyAttribute($currency){
+    public function getCurrencyAttribute($currency)
+    {
         return ucwords($currency);
+    }
+
+    public function logoBase64()
+    {
+        $image = base64_encode(file_get_contents(public_path('assets/media/dios_vivo_fondo_blanco.jpg')));
+        return $image;
     }
 }

@@ -310,7 +310,7 @@
                             <div>Telefono: {{ $business->code_number . ' ' . $business->phone_number }}</div>
                         </td>
                         <td style="width: 50%;text-align: right;">
-                            <img src="{{ public_path('assets/media/dios_vivo_fondo_blanco.jpeg') }}" alt=""
+                            <img src="data:image/png;base64,{{ $business->logoBase64() }}" alt=""
                                 height="110">
 
                         </td>
@@ -381,7 +381,8 @@
                                                     style="padding: 3px !important; background-color: rgba(226, 226, 226, 0.3)">
                                                     <strong>Monto Gestion {{ $close->year }}</strong>
                                                 </td>
-                                                <td class="right text-info" style="padding: 5px !important;color: rgb(96, 86, 243)">
+                                                <td class="right text-info"
+                                                    style="padding: 5px !important;color: rgb(96, 86, 243)">
                                                     <strong style="text-transform: capitalize;">
                                                         {{ $business->currency }}
                                                         {{ number_format($close->total_saldo, 2, ',', '.') }}</strong>
@@ -391,9 +392,11 @@
                                                 <td colspan="2" class="left"
                                                     style="padding: 3px !important; background-color: rgba(254, 254, 254, 0.3);text-align: center">
                                                     <strong>
-                                                       Monto total hasta: {{
-                                                        \Jenssegers\Date\Date::parse(
-                                                            Carbon\Carbon::parse($books->first()->new_date . '-01')->endOfYear())->format('F Y') }}  </strong>
+                                                        Monto total hasta:
+                                                        {{ \Jenssegers\Date\Date::parse(Carbon\Carbon::parse($books->first()->new_date . '-01')->endOfYear())->format(
+                                                            'F Y',
+                                                        ) }}
+                                                    </strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -405,7 +408,8 @@
                                                     </strong>
                                                 </td>
                                                 <td class="right text-info" style="padding: 5px !important;">
-                                                    <strong style="text-transform: capitalize; color: {{ ($close->total_saldo + $saldo->saldo_anual) > 0 ? "rgb(96, 86, 243)":"red"}}">
+                                                    <strong
+                                                        style="text-transform: capitalize; color: {{ $close->total_saldo + $saldo->saldo_anual > 0 ? 'rgb(96, 86, 243)' : 'red' }}">
                                                         {{ $business->currency }}
                                                         {{ number_format($close->total_saldo + $saldo->saldo_anual, 2, ',', '.') }}</strong>
                                                 </td>

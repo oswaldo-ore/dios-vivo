@@ -285,9 +285,10 @@
     .card-header {
         padding: 0.5rem 0.5rem !important;
     }
+
     .float-right {
-    float: right !important;
-}
+        float: right !important;
+    }
 </style>
 
 <body>
@@ -302,15 +303,15 @@
                         <td class="left" style="width: 50%; font-size: 14px">
 
                             <div>
-                                <strong style="text-transform: uppercase;">{{$business->name}}</strong>
+                                <strong style="text-transform: uppercase;">{{ $business->name }}</strong>
                             </div>
-                            <div>Ubicacion: {{$business->location}}</div>
-                            <div>Correo: {{$business->email}}</div>
-                            <div>Telefono: {{$business->code_number." ".$business->phone_number}}</div>
+                            <div>Ubicacion: {{ $business->location }}</div>
+                            <div>Correo: {{ $business->email }}</div>
+                            <div>Telefono: {{ $business->code_number . ' ' . $business->phone_number }}</div>
                         </td>
                         <td style="width: 50%;text-align: right;">
-                            <img src="{{ public_path('assets/media/dios_vivo_fondo_blanco.jpeg') }}" alt=""
-                                height="110">
+                            <img src="data:image/png;base64,{{ $business->logoBase64() }}" alt="logo"
+                                height="110px">
 
                         </td>
 
@@ -341,7 +342,8 @@
                                                 <strong>Total ingreso</strong>
                                             </td>
                                             <td class="right" style="padding: 5px !important;color: green">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total_ingreso'],2,",",".")}}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ number_format($books->totales['total_ingreso'], 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -350,7 +352,8 @@
                                                 <strong>Total egreso</strong>
                                             </td>
                                             <td class="right" style="padding: 3px !important; color: red;">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total_egreso'],2,",",".") }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ number_format($books->totales['total_egreso'], 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
                                         <tr>
@@ -359,7 +362,8 @@
                                                 <strong>Saldo total</strong>
                                             </td>
                                             <td class="right" style="padding: 3px !important;">
-                                                <strong style="text-transform: capitalize;"> {{$business->currency}} {{ number_format($books->totales['total'],2,",",".") }}</strong>
+                                                <strong style="text-transform: capitalize;"> {{ $business->currency }}
+                                                    {{ number_format($books->totales['total'], 2, ',', '.') }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -401,20 +405,23 @@
                                     if (count($book->moreDescription) > 0) {
                                         $moreDescriptionString = ': <br>Detalle:<br>';
                                         foreach ($book->moreDescription as $key => $description) {
-                                            $moreDescriptionString = $moreDescriptionString.($key+1).": ".$description->nombre . ' ( Bs. ' . $description->precio . ' ) <br>';
+                                            $moreDescriptionString = $moreDescriptionString . ($key + 1) . ': ' . $description->nombre . ' ( Bs. ' . $description->precio . ' ) <br>';
                                         }
                                     }
                                 @endphp
                                 <td class="left strong" style="font-weight: 700;">{{ $book->date }}</td>
-                                <td class="left">{{ $book->description==""?"Sin descripcion" : $book->description }}{!! html_entity_decode($moreDescriptionString)!!}</td>
+                                <td class="left">
+                                    {{ $book->description == '' ? 'Sin descripcion' : $book->description }}{!! html_entity_decode($moreDescriptionString) !!}
+                                </td>
 
                                 <td class="right" style="font-weight: 700;text-transform: capitalize; font-size: 13px">
                                     {{ $book->category->name }}</td>
                                 <td class="center" style="    text-transform: capitalize;">{{ $book->type }}</td>
                                 <td class="right"
                                     style="font-weight: 600 ; text-transform: capitalize; color:{{ $book->type == 'ingreso' ? 'green' : 'red' }}; ">
-                                    {{$business->currency}}
-                                    {{  number_format($book->type == 'ingreso' ? $book->saldo : $book->saldo,2,",",".") }}</td>
+                                    {{ $business->currency }}
+                                    {{ number_format($book->type == 'ingreso' ? $book->saldo : $book->saldo, 2, ',', '.') }}
+                                </td>
                             </tr>
                         @empty
                         @endforelse

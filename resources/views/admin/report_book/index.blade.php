@@ -29,7 +29,9 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Seleccione una fecha" id="date_start" name="date_inicio" required />
+                            placeholder="Seleccione una fecha" id="date_start"
+                            value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" name="date_inicio"
+                            required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-3">
@@ -38,7 +40,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input class="form-control form-control-sm form-control-solid" autocomplete="off"
-                            placeholder="Seleccione una fecha" id="date_end" name="date_fin" required />
+                            placeholder="Seleccione una fecha" id="date_end" name="date_fin"
+                            value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required />
                         <!--end::Input-->
                     </div>
                     <div class="mb-3 fv-row fv-plugins-icon-container col-md-3">
@@ -50,7 +53,7 @@
                             data-placeholder="Seleccione una categoria" id="category" name="category" required>
                             <option></option>
                             <optgroup label="Todos">
-                                <option value="0" selected>Todas Categoria</option>
+                                <option value="0" selected>Todas las Categorias</option>
                                 <option value="1">Todos Ingresos</option>
                                 <option value="2">Todos Egresos</option>
                             </optgroup>
@@ -68,13 +71,13 @@
                         <!--end::Input-->
                     </div>
                     <div class="col-auto mb-6">
-                        {{--<div class="form-check form-check-custom form-check-solid form-check-sm">
+                        {{-- <div class="form-check form-check-custom form-check-solid form-check-sm">
                             <input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked"
                                 checked="checked" />
                             <label class="form-check-label" for="flexCheckChecked">
                                 Solo mes
                             </label>
-                        </div>--}}
+                        </div> --}}
                     </div>
                     <div class="col mb-3 text-end">
                         <button class="btn btn-sm btn-primary" type="submit"> Buscar </button>
@@ -101,11 +104,11 @@
             <div class="row" style="display: none" id="button_reporte">
                 <div class="col-md-12">
                     <div class="col-auto text-end">
-                        <form action="{{route('show.book.web.pdf')}}" method="get">
+                        <form action="{{ route('show.book.web.pdf') }}" method="get">
                             <input hidden id="date_start_report" name="date_start_report" />
-                            <input hidden  id="date_end_report" name="date_end_report" />
+                            <input hidden id="date_end_report" name="date_end_report" />
                             <input type="hidden" id="category_report" name="category_report">
-                        <button  type="submit" class="btn btn-sm btn-primary" formtarget="_blank"> Reporte </button >
+                            <button type="submit" class="btn btn-sm btn-primary" formtarget="_blank"> Reporte </button>
                         </form>
                     </div>
                 </div>
@@ -136,38 +139,21 @@
             $("#date_start").prop('readonly', false);
             $("#date_end").prop('readonly', false);
 
+            $("#date_start").on('change', function() {
+                bookReport();
+            });
+
+            $("#date_end").on('change', function() {
+                bookReport();
+            });
+
+            $('#category').on('change', function() {
+                bookReport();
+            });
+
             $('#form-book').on('submit', function(e) {
                 e.preventDefault();
-                var date_start = document.getElementById("date_start");
-                var date_end = document.getElementById("date_end");
-                var categoria = document.getElementById("category");
-                $("#date_start_report").val(date_start.value);
-                $("#date_end_report").val(date_end.value);
-                $('#category_report').val(categoria.value);
-
-
-                $.ajax({
-                    url: this.action,
-                    type: 'GET',
-                    data: {
-                        "date_start": date_start.value,
-                        "date_end": date_end.value,
-                        "category_id": categoria.value
-                    },
-                    success: function(response) {
-                        books = response.books;
-                        console.log(books);
-                        updateList();
-                        $('#button_reporte').show();
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr);
-                        $('#button_reporte').hide();
-                    }
-
-                });
-
-                console.log(this.action);
+                bookReport();
                 //updateList();
                 //clearInput();
             });
@@ -190,7 +176,41 @@
                 $(myForm).submit();
             });
 
+            bookReport();
         });
+
+        function bookReport() {
+            var date_start = document.getElementById("date_start");
+            var date_end = document.getElementById("date_end");
+            var categoria = document.getElementById("category");
+            $("#date_start_report").val(date_start.value);
+            $("#date_end_report").val(date_end.value);
+            $('#category_report').val(categoria.value);
+
+
+            $.ajax({
+                url: $('#form-book').attr('action'),
+                type: 'GET',
+                data: {
+                    "date_start": date_start.value,
+                    "date_end": date_end.value,
+                    "category_id": categoria.value
+                },
+                success: function(response) {
+                    books = response.books;
+                    console.log(books);
+                    updateList();
+                    $('#button_reporte').show();
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr);
+                    $('#button_reporte').hide();
+                }
+
+            });
+
+            console.log(this.action);
+        }
 
         function clearInput() {
             var descripcion = document.getElementById("description");
@@ -210,7 +230,7 @@
 
             books.forEach(function(book, index) {
                 var more_description_string = "";
-                if(book.more_description.length > 0 ){
+                if (book.more_description.length > 0) {
                     more_description_string = ":<br>";
                     book.more_description.forEach((moreDescription, index, array) => {
                         more_description_string +=
