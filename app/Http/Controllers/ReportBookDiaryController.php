@@ -23,8 +23,31 @@ class ReportBookDiaryController extends Controller
     public function getBookRange(Request $request)
     {
         try {
-            $dateInicio = $request->date_start;
-            $dateFin = $request->date_end;
+            if($request->has('date_start') && $request->has('date_end')){
+                $dateInicio = $request->date_start;
+                $dateFin = $request->date_end;
+            }else{
+                $dateInicio = Carbon::now()->subMonth(12)->startOfMonth()->format('Y-m-d');
+                $dateFin = Carbon::now()->addDay()->format('Y-m-d');
+            }
+            $category_id = $request->category_id;
+            $books = Book::getDetailsOfBookInRangeDate($dateInicio, $dateFin, $category_id);
+            return response()->json(["books" => json_decode($books), "message" => "petición correcta"]);
+        } catch (\Throwable $th) {
+            return response()->json(["message" => $th->getMessage()], Response::HTTP_BAD_GATEWAY);
+        }
+    }
+
+    public function getBookRangeV2(Request $request)
+    {
+        try {
+            if($request->has('date_start') && $request->has('date_end')){
+                $dateInicio = $request->date_start;
+                $dateFin = $request->date_end;
+            }else{
+                $dateInicio = Carbon::now()->subMonth(12)->startOfMonth()->format('Y-m-d');
+                $dateFin = Carbon::now()->addDay()->format('Y-m-d');
+            }
             $category_id = $request->category_id;
             $books = Book::getDetailsOfBookInRangeDate($dateInicio, $dateFin, $category_id);
             return response()->json(["books" => json_decode($books), "message" => "petición correcta"]);

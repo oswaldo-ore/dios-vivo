@@ -48,6 +48,7 @@ Route::prefix('admin')->group(function(){
 
         Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
         Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
+        Route::get('report/range/v2', [ReportBookDiaryController::class, 'getBookRangeV2'])->name('report.getBookRange.v2');
 
         Route::get('report/yearly', [ReportBookDiaryController::class, 'indexReportYearly'])->name('report.yearly.index');
         Route::get('report/yearly/year', [ReportBookDiaryController::class, 'getReportByYear'])->name('report.getBookRangeYear');

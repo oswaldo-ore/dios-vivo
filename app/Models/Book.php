@@ -90,7 +90,7 @@ class Book extends Model
                 ->with('moreDescription')
                 ->where("date", ">=", $dateStar)
                 ->where('date', '<=', $dateEnd)
-                ->orderBy("date", "asc")
+                ->orderBy("date", "desc")
                 ->get();
         } else {
             $categoryIds = [$categoryId];
@@ -101,7 +101,7 @@ class Book extends Model
                 ->where('date', '<=', $dateEnd)
                 ->with("category:id,name")
                 ->with('moreDescription')
-                ->orderBy("date", "asc")
+                ->orderBy("date", "desc")
                 ->whereIn('category_id', $categoryIds)
                 ->get();
         }
@@ -211,11 +211,52 @@ class Book extends Model
         return $books;
     }
 
+    public static function getTotalForYear($year){
+        $books = Book::whereYear('date', '=', $year)->selectRaw("
+            count('id') as amount,
+            DATE_FORMAT(date,'%Y') as new_date,
+            cast( sum(haber) as decimal(20,2)) as haber,
+            cast( sum(debe) as decimal(20,2)) as debe,
+            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
+            cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
+            cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
+        ")
+        ->orderBy('new_date')
+        ->groupBy('new_date')
+        ->first();
+        return $books;
+    }
+
+    public static function totalBalanceUpToThePreviousYear($year){
+        $books = Book::whereYear('date', '<=', $year)->selectRaw("
+            count('id') as amount,
+            DATE_FORMAT(date,'%Y') as new_date,
+            cast( sum(haber) as decimal(20,2)) as haber,
+            cast( sum(debe) as decimal(20,2)) as debe,
+            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
+            cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
+            cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
+        ")
+        ->orderBy('new_date')
+        ->groupBy('new_date')
+        ->get();
+        $total = 0;
+        foreach ($books as $book) {
+            $total+= $book->total_saldo;
+        }
+        return (object)[
+            'last_year' => $year,
+            'total' => $total,
+        ];
+    }
+
     public static function getAllYearWithoutYearNow(){
         $yearNow = Carbon::now()->format('Y');
         $years = Book::whereYear('date','!=',$yearNow)
         ->selectRaw("DATE_FORMAT(date,'%Y') as new_date")
-        ->groupBy('date')
+        ->groupBy('new_date')
         ->get()
         ->pluck('new_date')
         ->toArray();

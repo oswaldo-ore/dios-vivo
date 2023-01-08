@@ -189,7 +189,7 @@
                         datalabels: {
                             anchor: 'end',
                             align: 'top',
-                            formatter: Math.round,
+                            // formatter: Math.round,
                             font: {
                                 weight: 'bold'
                             }
@@ -257,6 +257,7 @@
                 fechas: statisticsYear.map(statis => statis.new_date),
                 saldos: statisticsYear.map(statis => statis.total_saldo),
             }
+            console.log(datos);
             if (lineChar2) {
                 lineChar2.destroy();
             }
@@ -267,7 +268,7 @@
             const data = {
                 labels: labels,
                 datasets: [{
-                    label: 'Monto por ano',
+                    label: 'Monto por año',
                     data: datos.saldos,
                     backgroundColor: '#04B95F',
                     stack: 'Stack 1',
@@ -278,7 +279,7 @@
             };
 
             const config = {
-                type: 'line',
+                type: 'bar',
                 data: data,
                 plugins: [ChartDataLabels],
                 options: {
@@ -286,7 +287,6 @@
                         datalabels: {
                             anchor: 'end',
                             align: 'top',
-                            formatter: Math.round,
                             font: {
                                 weight: 'bold'
                             }
@@ -317,6 +317,7 @@
                     scales: {
                         x: {
                             stacked: true,
+                            beginAtZero: true,
                             ticks: {
                                 font: {
                                     size: 13,

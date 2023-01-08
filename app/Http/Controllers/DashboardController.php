@@ -14,10 +14,11 @@ class DashboardController extends Controller
     public function index()
     {
         $year = Carbon::now()->year;
+        $previousYear = Carbon::now()->subYear()->year;
         //suma total de las categorias con sus respectivas clases
         $year= Category::totalByCategoryByYear($year);
-
-        return view('admin.dashboard.index',compact('year'));
+        $previousBalance = Book::totalBalanceUpToThePreviousYear($previousYear);
+        return view('admin.dashboard.index',compact('year','previousBalance'));
     }
 
     public function indexByGestion()

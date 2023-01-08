@@ -16,6 +16,10 @@
             <div class="card-title">
                 Registrar Ingreso - Egreso
             </div>
+            <div class="card-toolbar">
+                <a  data-bs-toggle="modal"
+                data-bs-target="#modal_search_book" class="btn btn-sm btn-success">Buscar</a>
+            </div>
         </div>
         <div class="card-body">
             <form id="form-book">
@@ -141,6 +145,7 @@
         </div>
     </div>
     @include('admin.book.modal-more-description')
+    @include('admin.book.search-category')
 @endsection
 
 @push('js')
