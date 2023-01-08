@@ -247,7 +247,7 @@
                                 <td class="text-capitalize">${book.type}</td>
                                 <td>
                                     <span class="fw-bold fs-6  badge ${book.type == "egreso" ? "badge-light-danger":"badge-light-primary" }">
-                                        ${ getFormatNumber(book.saldo.toFixed(2))}
+                                        ${ getFormatNumber(parseFloat(book.saldo).toFixed(2))}
                                     </span>
                                 </td>
                                 `;
