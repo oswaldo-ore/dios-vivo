@@ -337,7 +337,7 @@
 
         $(document).ready(function() {
             $("#menu-business").addClass('active open');
-            if(business.show_report_public || business.show_report_yearly){
+            if(!business.show_report_public || !business.show_report_yearly){
                 $('.mostrar_reportes input').prop('disabled',true);
             }
         });
