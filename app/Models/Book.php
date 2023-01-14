@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -79,6 +80,40 @@ class Book extends Model
         }
         //Book::insert($books);
         return $total_haber - $total_debe;
+    }
+
+    public static function transfer($category_id,$amount){
+        $business = Business::getBusiness();
+        if($business->saldo_total < $amount ){
+            throw new Exception("No se pudo completar la transferencia porque la cantidad es mayor al saldo total, Saldo total: ".$business->saldo_total, 1);
+        }
+        $category = Category::getCategoryTransferWithdrawal();
+        $cate = Category::findOrFail($category_id);
+        $book = new Book([
+            "date" => Carbon::now(),
+            "debe" => $amount,
+            "haber" => 0,
+            'saldo' => $amount,
+            "description" => "Retiro la cantidad de ".$amount." para el abono a la categoría: ".$cate->name,
+            "type" => "egreso",
+            "category_id" => $category->id,
+            "user_id" => Auth::user()->id,
+        ]);
+        $book->save();
+        $description = "Abono la cantidad de ".$amount." a la categoría: ".$cate->name;
+        $admissionBook = new Book([
+            "date" => Carbon::now(),
+            "debe" => 0,
+            "haber" => $amount,
+            'saldo' => $amount,
+            "description" => $description,
+            "type" => "ingreso",
+            "category_id" => $category_id,
+            "user_id" => Auth::user()->id,
+        ]);
+        $admissionBook->save();
+        $transaction = Transaction::createTransaction($description,$amount,$admissionBook->id);
+        return $transaction;
     }
 
     public static function getDetailsOfBookInRangeDate($dateStar, $dateEnd, $categoryId)

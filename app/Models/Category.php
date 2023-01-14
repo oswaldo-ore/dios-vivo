@@ -11,6 +11,9 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public static $transferWithdrawal = "Retiro de transferencia";
+    public static $transferIncome = "Ingreso de transferencia";
+
     protected $fillable = [
         "id", "name", "category_id",'is_enabled'
     ];
@@ -61,5 +64,21 @@ class Category extends Model
                 "categories" => $books,
             ];
         return $data;
+    }
+
+    public static function getIncomeCategory(){
+        $category = Category::find(1)->with('categories')->first();
+        return $category;
+    }
+
+    public static function getCategoryTransferWithdrawal(){
+        $category = Category::where('name',Category::$transferWithdrawal)->first();
+        if(is_null($category)){
+            $category = new Category();
+            $category->name = Category::$transferWithdrawal;
+            $category->category_id = 2;
+            $category->save();
+        }
+        return $category;
     }
 }

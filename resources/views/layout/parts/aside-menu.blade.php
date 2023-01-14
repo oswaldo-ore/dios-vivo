@@ -91,7 +91,17 @@
                     <!--end::Svg Icon-->
                 </span>
             </span>
-            <span class="menu-title">Categoria</span>
+            <span class="menu-title">Categoría</span>
+        </a>
+    </div>
+
+    <div class="menu-item">
+        <a class="menu-link" id="menu-transactions" href="{{ route('transfer.index') }}" title="Transferir Ingreso a otra categoria"
+            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+            <span class="menu-icon">
+                <i class="fas fa-random fs-4"></i>
+            </span>
+            <span class="menu-title">Transferir a Categoría</span>
         </a>
     </div>
 @endif

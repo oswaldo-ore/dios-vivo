@@ -46,6 +46,9 @@ Route::prefix('admin')->group(function(){
         Route::get('/book', [BookController::class, 'index'])->name('book.index');
         Route::post('/book', [BookController::class, 'store'])->name('book.store');
 
+        Route::get('transfer',[BookController::class, 'transferIndex'])->name('transfer.index');
+        Route::post('transfer',[BookController::class, 'transferSave'])->name('transfer.save');
+
         Route::get('report', [ReportBookDiaryController::class, 'index'])->name('report.book.index');
         Route::get('report/range', [ReportBookDiaryController::class, 'getBookRange'])->name('report.getBookRange');
         Route::get('report/range/v2', [ReportBookDiaryController::class, 'getBookRangeV2'])->name('report.getBookRange.v2');
