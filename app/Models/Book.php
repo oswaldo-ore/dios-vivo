@@ -193,7 +193,7 @@ class Book extends Model
             $books->whereIn('category_id',$categories_id)->selectRaw('category_id')->groupBy('category_id')->orderBy('category_id')->with('category:id,name');
         }
         if($show_category == 1 && $category_id == 0 ){
-            $books->selectRaw('category_id')->groupBy('category_id')->orderBy('category_id')->with('category:id,name');
+            $books->selectRaw('category_id')->groupBy('category_id')->with('category:id,name');
         }
 
         $books->selectRaw("

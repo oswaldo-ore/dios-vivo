@@ -516,7 +516,7 @@
                             <tr>
                                 <td class="center">{{ $loop->iteration + (!is_null($close) ? 1 : 0) }}</td>
                                 <td class="left strong" style="font-weight: 700;">
-                                    {{ ucwords(\Jenssegers\Date\Date::parse($book->new_date . '-01')->format('F')) }}
+                                    {{ ucwords(\Jenssegers\Date\Date::parse($book->new_date . '-01')->format('Y - F ')) }}
                                 </td>
                                 <td class="left" style="font-weight: 600; ">
                                     {{ !isset($book->category_id) ? 'Todos' : $book->category->name }}

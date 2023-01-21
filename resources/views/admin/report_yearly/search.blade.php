@@ -3,6 +3,7 @@
         $total_ingreso = 0;
         $total_egreso = 0;
         $saldo_anual = 0;
+        \Jenssegers\Date\Date::setLocale('es');
     @endphp
 
     @if (!is_null($close))
@@ -36,6 +37,7 @@
         @php
             $previous_year = Carbon\Carbon::parse($books->first()->new_date . '-01')->subYear()->format('Y');
         @endphp
+
         <td class="fw-bolder fs-6">{{ $previous_year }}</td>
         <td class="fw-bolder text-uppercase">GESTION {{$previous_year}}</td>
         <td colspan="3">
@@ -52,7 +54,7 @@
             $saldo_anual += $book->total_saldo;
         @endphp
         <tr>
-            <td class="fw-bolder fs-6">{{ Carbon\Carbon::parse($book->new_date . '-01')->format('m-Y') }}</td>
+            <td class="fw-bolder fs-6">{{ ucwords(\Jenssegers\Date\Date::parse($book->new_date . '-01')->format('Y - F ')) }}</td>
             <td class="fw-bolder text-uppercase">{{ !isset($book->category_id) ? 'Todos' : $book->category->name }}</td>
             <td>
                 <span class="badge badge-light-primary fs-7  ">
