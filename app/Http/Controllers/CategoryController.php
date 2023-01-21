@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
+use App\Models\Business;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -77,7 +79,23 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-        return redirect('/admin/category')->with("success", "Eliminado con éxito");
+        try {
+            DB::beginTransaction();
+            $monto = $category->books()->sum('saldo');
+            $business = Business::getBusiness();
+            if($category->category_id == 1){ //ingreso
+                $business->saldo_total -= $monto;
+            }else{//egreso
+                $business->saldo_total += $monto;
+            }
+            $business->update();
+            $category->books()->delete();
+            $category->delete();
+            DB::commit();
+            return redirect('/admin/category')->with("success", "Eliminado con éxito");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect('/admin/category')->with("success", "Eliminado con éxito");
+        }
     }
 }
