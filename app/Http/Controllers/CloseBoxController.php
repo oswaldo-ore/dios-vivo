@@ -27,7 +27,6 @@ class CloseBoxController extends Controller
                 $books->totales = Book::getTotalIngresoEgresoBooksInRangeDate($dateInicio, $dateFin, 0);
                 $category_id = 0;
                 return view('pdf.close-box', compact('books', 'dateInicio', 'dateFin', 'category_id','year'));
-                dd($books);
             } else {
                 return back()->with('error', "Este año ya tiene registrado el cierre de caja anual");
             }

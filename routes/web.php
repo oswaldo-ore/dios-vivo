@@ -7,6 +7,7 @@ use App\Http\Controllers\CloseBoxController;
 use App\Http\Controllers\CloseTheBoxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MonthlyClosureController;
 use App\Http\Controllers\ReportBookDiaryController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserController;
@@ -60,6 +61,10 @@ Route::prefix('admin')->group(function(){
         Route::get('close-box/close/{year}', [CloseBoxController::class, 'closeManagement'])->name('close.box.year.index');
         Route::post('close-box/close/', [CloseBoxController::class, 'closeManagementConfirm'])->name('close.box.year.confirm.index');
 
+        Route::get('monthly-box/', [MonthlyClosureController::class, 'index'])->name('monthly.closure.index');
+        Route::get('close-monthly-box', [MonthlyClosureController::class, 'closeManagement'])->name('monthly.closure.box');
+        Route::post('close-monthly-box/close', [MonthlyClosureController::class, 'closeManagementConfirm'])->name('monthly.closure.box.close');
+        Route::get('close-monthly-box/report/pdf', [MonthlyClosureController::class, 'downloadBooksByRangePdf'])->name('monthly.closure.report.pdf');
 
 
         Route::get('/home', [HomeController::class, 'index'])->name('home');

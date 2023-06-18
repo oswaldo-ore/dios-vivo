@@ -297,4 +297,16 @@ class Book extends Model
         ->toArray();
         return $years;
     }
+
+    public static function lastRecordedDate(){
+        $min = self::min('date');
+        $max = self::max('date');
+        if(is_null($min) || is_null($max)){
+            return null;
+        }
+        return (object)[
+            "min" => $min,
+            "max" => $max,
+        ];
+    }
 }
