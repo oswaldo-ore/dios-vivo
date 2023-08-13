@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="fw-bolder modal-title"> Agregar descripcion</h2>
-                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                <div class="btn btn-icon btn-active-icon-primary" data-bs-dismiss="modal">
                     <span class="svg-icon svg-icon-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none">
@@ -22,15 +22,15 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-auto text-center">
-                            <a id="add_new_name_price" class="btn btn-sm btn-light-info primary btn-icon "> <i
+                            <a id="add_new_name_price" class="btn btn-light-info primary btn-icon "> <i
                                     class="fas fa-plus-circle"></i> </a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light btn-sm " data-bs-dismiss="modal">Cerrar</button>
-                <a onclick="guardarNameAndPrice()" class="btn btn-primary btn-sm">Guardar</a>
+                <button type="button" class="btn btn-light " data-bs-dismiss="modal">Cerrar</button>
+                <a onclick="guardarNameAndPrice()" class="btn btn-primary">Guardar</a>
             </div>
         </div>
     </div>
@@ -41,14 +41,14 @@
         <div class="col-md-6">
             <div class="form-group mb-4">
                 <label for="" class="form-label required"> Nombre: </label>
-                <input type="text" class="form-control form-control-sm form-control-solid"
+                <input type="text" class="form-control form-control-solid"
                     placeholder="Ej. Pollo, Pernos, Arroz, etc." name="description_name" required autocomplete="off">
             </div>
         </div>
         <div class="col-md-5">
             <div class="form-group mb-4">
                 <label for="" class="form-label required"> Precio: </label>
-                <input type="text" class="form-control form-control-sm form-control-solid" value="0"
+                <input type="text" class="form-control form-control-solid" value="0"
                     placeholder="Ingrese un precio" name="price_description"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required autocomplete="off">
             </div>
         </div>

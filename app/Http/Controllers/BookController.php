@@ -33,9 +33,14 @@ class BookController extends Controller
         try {
             $saldo = Book::addDebeHaberBooks($request);
             Business::updateSaldoTotal($saldo);
-            return back()->with("success", "Registros agregados correctamente");
+            if($request->ajax()){
+                return response()->json(['message'=> "Registros agregados correctamente.",'data' => $saldo]);
+            }
+            return back()->with("success", "Registros agregados correctamente.");
         } catch (\Throwable $th) {
-            dd($th->getMessage().$th->getTraceAsString());
+            if($request->ajax()){
+                return response()->json(['message'=> $th->getMessage()],403);
+            }
             return back()->with("error","No se pudo completar la operación".$th->getMessage());
         }
     }

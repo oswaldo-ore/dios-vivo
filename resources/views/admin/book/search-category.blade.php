@@ -23,7 +23,7 @@
                         <label class="required form-label">Categoria: </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <select class="form-select form-select-sm form-select-solid" data-control="select2"
+                        <select class="form-select form-select-solid" data-control="select2"
                             data-placeholder="Seleccione una categoria" id="search_category" name="search_category" required>
                             <option></option>
                             @forelse ($categories as $category)
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light btn-sm " data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
