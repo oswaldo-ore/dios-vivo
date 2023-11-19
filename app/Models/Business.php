@@ -29,7 +29,7 @@ class Business extends Model
     {
         $business = Business::first();
         if (!is_null($business)) {
-            $business->saldo_total = $business->saldo_total + $monto;
+            $business->saldo_total = $business->saldo_total + ($monto);
             $business->update();
         }
     }

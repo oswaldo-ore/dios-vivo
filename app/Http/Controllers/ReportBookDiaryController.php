@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use SnappyPDF;
 use Barryvdh\DomPDF\Facade\Pdf as DomPDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportBookDiaryController extends Controller
 {
@@ -53,6 +54,24 @@ class ReportBookDiaryController extends Controller
             return response()->json(["books" => json_decode($books), "message" => "petición correcta"]);
         } catch (\Throwable $th) {
             return response()->json(["message" => $th->getMessage()], Response::HTTP_BAD_GATEWAY);
+        }
+    }
+
+    public function deleteBook(Book $book){
+        DB::beginTransaction();
+        try {
+            $book->delete();
+            if ($book->type == Book::EGRESO) {
+                $saldo = $book->saldo;
+            }else{
+                $saldo = $book->saldo * (-1);
+            }
+            Business::updateSaldoTotal($saldo);
+            DB::commit();
+            return response()->json(['codigo'=> 0,"message"=>"Registro eliminado con éxito"]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['codigo'=> 1,"message"=>"No se pudo elimianr el libro ".$th->getTraceAsString(),"data" => ""]);
         }
     }
 

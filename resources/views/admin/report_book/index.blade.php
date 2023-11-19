@@ -94,6 +94,9 @@
                                 <th>Categoria</th>
                                 <th>Tipo</th>
                                 <th>Monto</th>
+                                @if (auth()->user()->rol_id == 1)
+                                    <th>Opciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody id="cuerpo" style="vertical-align: middle;">
@@ -237,7 +240,14 @@
                             `${moreDescription.nombre} (Bs. ${moreDescription.precio} ) ${index == array.length-1 ? ".": ", <br>"}`;
                     });
                 }
-
+                let tdOpcion = "";
+                @if (auth()->user()->rol_id == 1)
+                    tdOpcion = `
+                        <td>
+                            <a class="btn btn-sm btn-icon btn-danger" onclick="removeBook('${book.id}','${book.date}','${book.description}')"> <i class="far fa-trash-alt"></i> </a>
+                        </td>
+                    `;
+                @endif
                 //activo y gasto => debe --> pasivo e ingresos --> haber
                 tr += `<tr id="book_${book.id}">`;
                 tr += `
@@ -250,6 +260,7 @@
                                         ${ getFormatNumber(parseFloat(book.saldo).toFixed(2))}
                                     </span>
                                 </td>
+                                ${tdOpcion}
                                 `;
                 tr += "</tr>";
                 total_debe += parseFloat(book.debe);
@@ -276,5 +287,45 @@
             `;
             $("#cuerpo").html(tr);
         }
+
+        @if (auth()->user()->rol_id == 1)
+            function removeBook(id, fecha, descripcion) {
+                Swal.fire({
+                    title: `Estas seguro?`,
+                    html: `
+                        Eliminar <b>${fecha}</b> <br>
+                        ${descripcion}
+                    `,
+                    icon: "info",
+                    buttonsStyling: false,
+                    confirmButtonText: "Eliminar!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ url("admin/report/delete")}}/' + id,
+                            type: 'DELETE',
+                            data:{
+                                _token:"{{csrf_token()}}"
+                            },
+                            success: function(response) {
+                                if(response.codigo == 0){
+                                    $(`#book_${id}`).remove();
+                                    Swal.fire("",response.message,"success");
+                                }else{
+                                    Swal.fire("",response.message,"error");
+                                }
+                            },
+                            error: function(error) {
+                                Swal.fire("",response.message,"error");
+                            }
+
+                        });
+                    }
+                });
+            }
+        @endif
     </script>
 @endpush

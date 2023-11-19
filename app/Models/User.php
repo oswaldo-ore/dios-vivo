@@ -68,6 +68,10 @@ class User extends Authenticatable
         })->withTrashed()->with('rol')->paginate(10);
     }
 
+    public function isAdmin(){
+        return $this->rol_id == 1;
+    }
+
     //usuarios q son super admin
     public static function usersSuperAdmin()
     {

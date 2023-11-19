@@ -17,6 +17,8 @@ class Book extends Model
     protected $fillable = [
         "date", "debe", "haber", "description", "type", "category_id", 'saldo', "user_id"
     ];
+    const INGRESO = "ingreso";
+    const EGRESO = "egreso";
 
     public function category()
     {
