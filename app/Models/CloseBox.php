@@ -33,17 +33,16 @@ class CloseBox extends Model
         return CloseBox::where('year',$year)->count() > 0;
     }
     public static function saveCloseBoxByYear($year){
-        $books = Book::whereYear('date','=',$year);
-        $books->selectRaw("
+        $books = Book::whereYear('date','=',$year)->selectRaw("
             count('id') as amount,
             DATE_FORMAT(date,'%Y') as new_date,
             cast( sum(haber) as decimal(20,2)) as haber,
             cast( sum(debe) as decimal(20,2)) as debe,
-            cast( (sum(haber)- sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
+            cast( (sum(haber) - sum(debe))  as decimal(20,2))as balance_sum_debe_haber,
             cast( sum(IF(type = 'ingreso',saldo,0)) as decimal(20,2)) as haber_saldo,
             cast( sum(IF(type = 'egreso',saldo,0)) as decimal(20,2)) as debe_saldo,
             cast( (sum(IF(type = 'ingreso',saldo,0)) - sum(IF(type = 'egreso',saldo,0))) as decimal(20,2)) as total_saldo
-        ")->groupBy('date');
+        ")->groupBy("new_date");
         $book= $books->first();
         $close = new CloseBox();
         $close->year = $year;

@@ -194,7 +194,7 @@
                     <!--end::Svg Icon-->
                 </span>
             </span>
-            <span class="menu-title">Cierre Mensual</span>
+            <span class="menu-title">Generar informe</span>
         </a>
     </div>
     <div class="menu-item">

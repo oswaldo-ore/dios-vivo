@@ -17,12 +17,12 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title">
-                Cierre mensual
+                Informe
             </div>
             <div class="card-toolbar">
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#cerrarMes">
-                    Cerrar Caja
-                  </button>
+                    Generar informe
+                </button>
             </div>
         </div>
         <div class="card-body">
@@ -66,7 +66,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9"> No se encontro cierres Mensuales </td>
+                                        <td colspan="9"> No se encontro informes. </td>
                                     </tr>
                                 @endforelse
                             </tbody>
