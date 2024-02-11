@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Business;
 use App\Models\Category;
+use App\Utils\WhatsappBussines;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
@@ -17,6 +18,8 @@ class BusinessController extends Controller
     public function index()
     {
         $business = Business::getBusiness();
+        $whatsapp = new WhatsappBussines($business);
+        $whatsapp->verifySessionV2();
         $countryCurrencyJson = file_get_contents('json/currency.json');
         $countryCurrency = json_decode($countryCurrencyJson);
         $countryCodeNumberJson = file_get_contents('json/country_codes.json');

@@ -19,6 +19,19 @@
         <div class="card-header">
             <div class="card-title">
                 Configuracion de la empresa
+                @if ($business->phone_number_connected)
+                    <span class="badge badge-primary ms-3">Conectado con Whatsapp: {{$business->phone_number_connected}} </span>
+                    <a href="javascript:void(0)" onclick="disconectWhatsapp()" title="Desconectar el whatsapp" class="btn btn-danger btn-circle btn-icon btn-sm ms-2"><i class="fas fa-times-circle"></i></a>
+                @endif
+            </div>
+            <div class="card-toolbar">
+                @if (!$business->phone_number_connected)
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#whatsappConnect">
+                        Conectar con Whatsapp
+                    </button>
+                    @include('admin.business.modal.modal-whatsapp'	)
+                @endif
+
             </div>
         </div>
         <div class="card-body">
@@ -345,5 +358,18 @@
         $('#code_number').on('change', function() {
             $('#span_code_number').text($(this).val());
         });
+        @if ($business->phone_number_connected)
+            function disconectWhatsapp(){
+                $.ajax({
+                    url: "{{ route('admin.business.whatsapp.terminateSession') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        if(response.success ){
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        @endif
     </script>
 @endpush

@@ -20,7 +20,7 @@
                 Informe
             </div>
             <div class="card-toolbar">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#cerrarMes">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cerrarMes">
                     Generar informe
                 </button>
             </div>
@@ -59,9 +59,14 @@
                                         <td>{{ $closure->total_anterior }}</td>
                                         <td>{{ $closure->total_cierre }}</td>
                                         <td>
-                                            <a onclick="downloadPdf('{{$closure->id}}')" class="btn btn-icon btn-sm btn-circle btn-light-primary fs-5">
+                                            <a onclick="downloadPdf('{{$closure->id}}')" class="btn btn-icon btn-circle btn-danger fs-5">
                                                 <i class="far fa-file-pdf"></i>
                                             </a>
+                                            @if ($business->phone_number_connected)
+                                                <button type="button" class="btn btn-primary" onclick="selectedInforme({{$closure->id}})" data-bs-toggle="modal" data-bs-target="#whatsappGetContacts">
+                                                    <i class="fab fa-whatsapp"></i> Whatsapp
+                                                </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -76,7 +81,9 @@
             </div>
         </div>
     </div>
-
+    @if ($business->phone_number_connected)
+        @include('admin.monthly_closure.modal.modal-select-group'	)
+    @endif
     @include('admin.monthly_closure.modal-monthly-closure')
 @endsection
 

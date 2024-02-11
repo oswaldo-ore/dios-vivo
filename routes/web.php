@@ -11,6 +11,7 @@ use App\Http\Controllers\MonthlyClosureController;
 use App\Http\Controllers\ReportBookDiaryController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WhatsappController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +67,7 @@ Route::prefix('admin')->group(function(){
         Route::get('close-monthly-box', [MonthlyClosureController::class, 'closeManagement'])->name('monthly.closure.box');
         Route::post('close-monthly-box/close', [MonthlyClosureController::class, 'closeManagementConfirm'])->name('monthly.closure.box.close');
         Route::get('close-monthly-box/report/pdf', [MonthlyClosureController::class, 'downloadBooksByRangePdf'])->name('monthly.closure.report.pdf');
+        Route::post('close-monthly-box/report/pdf/enviar', [MonthlyClosureController::class, 'sendBooksByRangePdf'])->name('monthly.closure.report.pdf.send');
 
 
         Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -91,6 +93,16 @@ Route::prefix('admin')->group(function(){
         Route::put('rols/{user}', [RolController::class, 'update'])->name('rols.update');
         Route::delete('rols/{user}', [RolController::class, 'destroy'])->name('user.destroy');
         Route::get('rols/{user}/changeState', [RolController::class, 'changeState'])->name('user.change');*/
+
+        Route::get('whatsapp/start-session',[WhatsappController::class,'startSession'])->name('admin.business.whatsapp.startSession');
+        Route::get('whatsapp/status-session',[WhatsappController::class,'statusSession'])->name('admin.business.whatsapp.statusSession');
+        Route::get('whatsapp/get-image-qr-base64',[WhatsappController::class,'getImageQrBase64'])->name('admin.business.whatsapp.getImageQrBase64');
+        Route::get('whatsapp/get-image-qr',[WhatsappController::class,'getImageQr'])->name('admin.business.whatsapp.getImageQr');
+        Route::get('whatsapp/get-chats',[WhatsappController::class,'getChats'])->name('admin.business.whatsapp.getChats');
+        Route::get('whatsapp/get-chats-html',[WhatsappController::class,'getChatsHtml'])->name('admin.business.whatsapp.getChatsHtml');
+        Route::get('whatsapp/verify-session',[WhatsappController::class,'verifySession'])->name('admin.business.whatsapp.verifySession');
+        //close session
+        Route::get('whatsapp/close-session',[WhatsappController::class,'terminateSession'])->name('admin.business.whatsapp.terminateSession');
 
     });
     Auth::routes();
