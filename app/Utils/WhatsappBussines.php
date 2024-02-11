@@ -79,6 +79,11 @@ class WhatsappBussines
         return $this->whatsappNodeJs->getChats();
     }
 
+    public function getContacts()
+    {
+        return $this->whatsappNodeJs->getContacts();
+    }
+
     public function getChatsGroup()
     {
         $responseChats = $this->whatsappNodeJs->getChats();
@@ -140,6 +145,7 @@ class WhatsappBussines
         if ($session->message == self::SESSION_NOT_CONNECTED) {
             $response = $this->whatsappNodeJs->getImageQr();
             while (isset($response->message) && $response->message == self::QR_CODE_NOT_READY) {
+                sleep(500);
                 $response = $this->whatsappNodeJs->getImageQr();
             }
             return $response;

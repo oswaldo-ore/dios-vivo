@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Utils\WhatsappBussines;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 
 class WhatsappController extends Controller
 {
     private $business;
     private $whatsappBussines;
-    public function __construct() {
+    public function __construct()
+    {
         $this->business = Business::getBusiness();
         $this->whatsappBussines = new WhatsappBussines($this->business);
     }
@@ -48,7 +48,15 @@ class WhatsappController extends Controller
     public function getChatsHtml()
     {
         $response = $this->whatsappBussines->getChats();
-        $view = View::make('admin.monthly_closure.modal.table-contacts')->with([ 'chats'=> $response->chats])->render();
+        $view = View::make('admin.monthly_closure.modal.table-contacts')->with(['chats' => $response->chats])->render();
+        return response()->json(["html" => $view]);
+    }
+
+    public function getContactsHtml()
+    {
+        $response = $this->whatsappBussines->getContacts();
+        $contacts = $response->success ?  $response->contacts: [];
+        $view = view('admin.monthly_closure.modal.table-contacts-v2')->with(['contactos' => $contacts])->render();
         return response()->json(["html" => $view]);
     }
 

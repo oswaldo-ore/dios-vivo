@@ -88,6 +88,12 @@ class WhatsappNodeJs
         return $response;
     }
 
+    public function getContacts(){
+        $endPoint = $this->URL . "/client/getContacts/$this->INSTANCEID";
+        $response = $this->sendRequest($endPoint, [], 'get');
+        return $response;
+    }
+
 
 
     /**

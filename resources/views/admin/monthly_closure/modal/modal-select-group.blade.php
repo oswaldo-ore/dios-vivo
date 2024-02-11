@@ -1,4 +1,5 @@
-<div class="modal fade" id="whatsappGetContacts" tabindex="-1" aria-labelledby="whatsappGetContacts" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="whatsappGetContacts" tabindex="-1" aria-labelledby="whatsappGetContacts" aria-hidden="true"
+    data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +17,8 @@
                     <div class="border  p-2 list_number ">
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-lg verificar d-none" href="javascript::void(0)" style="float: right" onclick="enviar()">
+                <button type="button" class="btn btn-primary btn-lg verificar d-none" href="javascript::void(0)"
+                    style="float: right" onclick="enviar()">
                     <span class="indicator-label">
                         Enviar a contactos
                     </span>
@@ -33,19 +35,19 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            let stateLoading = 0;//0 no cargado, 1 cargando, 2 cargado
+            let stateLoading = 0; //0 no cargado, 1 cargando, 2 cargado
             let selected = 0;
             let btnVerificar = $('.verificar');
             selectedInforme = (selectedId) => {
                 selected = selectedId;
-                if(stateLoading == 0){
+                if (stateLoading == 0) {
                     getChats();
                 }
             }
             getChats = () => {
                 stateLoading = 1;
                 $.ajax({
-                    url: "{{ route('admin.business.whatsapp.getChatsHtml') }}",
+                    url: "{{ route('admin.business.whatsapp.getContactsHtml') }}",
                     type: 'GET',
                     success: function(response) {
                         $('.chats').html(response.html);
@@ -77,7 +79,8 @@
                             $('#contactsSelected input[type="checkbox"]').prop('checked', false);
                             $('.list_number').html('');
                             $('#whatsappGetContacts').modal('hide');
-                            toastr.success('Se envio el informe a los contactos seleccionados', 'Reporte enviado');
+                            toastr.success('Se envio el informe a los contactos seleccionados',
+                                'Reporte enviado');
                             toastr.options.closeDuration = 10000;
                             toastr.options.timeOut = 10000;
                             toastr.options.extendedTimeOut = 10000;
@@ -101,19 +104,41 @@
                 });
             }
         })
-        function toggleCheckbox(tr,index,name,isGroup) {
+
+        function toggleCheckbox(tr, index, name, isGroup) {
             let checkbox = $(tr).find('input[type="checkbox"]');
             checkbox.prop('checked', !checkbox.prop('checked'));
-            if(checkbox.prop('checked')){
-                $('.list_number').append(`<span class=" me-2 mb-2 badge badge-${isGroup?'success':"info" } tr_${index}">${name}</span>`);
-            }else{
+            if (checkbox.prop('checked')) {
+                $('.list_number').append(
+                    `<span class=" me-2 mb-2 badge badge-${isGroup?'success':"info" } tr_${index}">${name}</span>`);
+            } else {
                 $('.list_number').find(`.tr_${index}`).remove();
             }
-            if($('.list_number').children().length > 0){
+            if ($('.list_number').children().length > 0) {
                 $('.contactSelected').removeClass('d-none');
-            }else{
+            } else {
                 $('.contactSelected').addClass('d-none');
             }
+        }
+        function searchByTrNameNumber(){
+            console.log("yoooooo");
+            let value = $('input[name="search_name_phone"]').val().toLowerCase();
+            console.log(value);
+            if (value === '') {
+                $('#contactsSelected table tbody tr').removeClass('d-none');
+                return;
+            }
+            $('#contactsSelected table tbody tr').each(function() {
+                let name = $(this).attr('name').toLowerCase();
+                let number = $(this).attr('number').toLowerCase();
+                let matchName = name.indexOf(value) > -1;
+                let matchNumber = number.indexOf(value) > -1;
+                if (matchName || matchNumber) {
+                    $(this).removeClass('d-none');
+                } else {
+                    $(this).addClass('d-none');
+                }
+            });
         }
     </script>
 @endpush

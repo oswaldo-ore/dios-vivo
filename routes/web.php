@@ -100,6 +100,7 @@ Route::prefix('admin')->group(function(){
         Route::get('whatsapp/get-image-qr',[WhatsappController::class,'getImageQr'])->name('admin.business.whatsapp.getImageQr');
         Route::get('whatsapp/get-chats',[WhatsappController::class,'getChats'])->name('admin.business.whatsapp.getChats');
         Route::get('whatsapp/get-chats-html',[WhatsappController::class,'getChatsHtml'])->name('admin.business.whatsapp.getChatsHtml');
+        Route::get('whatsapp/get-contacts-html',[WhatsappController::class,'getContactsHtml'])->name('admin.business.whatsapp.getContactsHtml');
         Route::get('whatsapp/verify-session',[WhatsappController::class,'verifySession'])->name('admin.business.whatsapp.verifySession');
         //close session
         Route::get('whatsapp/close-session',[WhatsappController::class,'terminateSession'])->name('admin.business.whatsapp.terminateSession');

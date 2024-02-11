@@ -19,8 +19,17 @@
                         Espere por favor... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                     </span>
                 </button>
+
+                <button type="button" class="btn btn-primary btn-lg verificar_qr verificar d-none" href="javascript::void(0)" onclick="verificarQr()">
+                    <span class="indicator-label">
+                        Verificar QR
+                    </span>
+                    <span class="indicator-progress">
+                        Espere por favor... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
                 {{-- <button type="button" href="javascript::void(0)" onclick="generateQR()" class="btn btn-primary btn-lg generar">Generar QR</button> --}}
-                <button type="button" href="javascript::void(0)" onclick="verificarQr()" class="btn btn-primary btn-lg verificar d-none">Verificar QR</button>
+                {{-- <button type="button" href="javascript::void(0)" onclick="verificarQr()" class="btn btn-primary btn-lg verificar d-none"></button> --}}
                 <!-- Espacio para mostrar el QR -->
             </div>
         </div>
@@ -30,9 +39,10 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            let btnVerificar = $('.generar_qr');
+            let generar_qr = $('.generar_qr');
+            let verificar_qr = $('.verificar_qr');
             generateQR = () => {
-                btnVerificar.attr("data-kt-indicator", "on");
+                generar_qr.attr("data-kt-indicator", "on");
                 $.ajax({
                     url: "{{ route('admin.business.whatsapp.getImageQr') }}",
                     type: 'GET',
@@ -42,22 +52,28 @@
                         $('#imagenContainer').append(img);
                         $('.generar').addClass('d-none');
                         $('.verificar').removeClass('d-none');
-                        btnVerificar.removeAttr("data-kt-indicator");
+                        generar_qr.removeAttr("data-kt-indicator");
                     },
                     error: function() {
-                        btnVerificar.removeAttr("data-kt-indicator");
+                        generar_qr.removeAttr("data-kt-indicator");
                     }
                 });
             }
 
             verificarQr = () => {
+                verificar_qr.attr("data-kt-indicator", "on");
                 $.ajax({
                     url: "{{ route('admin.business.whatsapp.verifySession') }}",
                     type: 'GET',
                     success: function(response) {
                         if(response.success ){
+                            toastr.success('Código QR verificado');
                             window.location.reload();
                         }
+                    },
+                    error: function() {
+                        toastr.error('No se pudo verificar el código QR');
+                        verificar_qr.removeAttr("data-kt-indicator");
                     }
                 });
             }
