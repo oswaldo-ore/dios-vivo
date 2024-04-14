@@ -145,8 +145,8 @@ class WhatsappBussines
         if ($session->message == self::SESSION_NOT_CONNECTED) {
             $response = $this->whatsappNodeJs->getImageQr();
             while (isset($response->message) && $response->message == self::QR_CODE_NOT_READY) {
-                sleep(500);
                 $response = $this->whatsappNodeJs->getImageQr();
+                sleep(500);
             }
             return $response;
         }
